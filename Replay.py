@@ -109,12 +109,13 @@ class LocPoint(object):
 			print 'ERROR: The format of the timestamp head is not "YYYYMM"'
 			return '-1'
 		else:
-			day = int(sec)%86400
+			day = int(sec)/86400
 			sec -= day*86400
-			hour = int(sec)%3600
+			hour = int(sec)/3600
 			sec -= hour*3600
-			minute = int(sec)%60
+			minute = int(sec)/60
 			sec -= minute*60
+			print day,hour,minute,sec
 			return yyyymm+str(day)+str(hour)+str(minute)+str(sec)
 		pass
 
@@ -208,10 +209,9 @@ def main():
 	xml = XMLFile(rootpath+filename)
 	LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L])
 	RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R])
-	RTrace.LinearInterpolation()
+	LTrace.LinearInterpolation()
 	
-	print dir(RTrace)
-	print str(RTrace)
+	print str(LTrace)
 
 	pass
 
