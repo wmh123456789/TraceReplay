@@ -79,16 +79,16 @@ class LocPoint(object):
 			self.yyyymm = self.timestamp[0:6]
 		# print self.sec
 
-	def getTimeStamp():
-		print self.timestamp
+	def getTimeStamp(self):
+		# print self.timestamp
 		return self.timestamp
 
-	def getX():
-		print self.x
+	def getX(self):
+		# print self.x
 		return self.x
 
-	def getY():
-		print self.y
+	def getY(self):
+		# print self.y
 		return self.y	
 
 	def Timestamp2Sec(self,timestamp):
@@ -123,11 +123,16 @@ class LocPoint(object):
 
 class LocTrace(object):
 	"""docstring for LocTrace"""
-	def __init__(self, arg):
+	def __init__(self, arg, tag = 'unknown'):
 		super(LocTrace, self).__init__()
 		self.timestamplist = arg[0] #TimeStemp list
 		self.xlist = arg[1] # X list
 		self.ylist = arg[2] # Y list
+		self.xmax = max(self.xlist)
+		self.xmin = min(self.xlist)
+		self.ymax = max(self.ylist)
+		self.ymin = min(self.ylist)
+		self.tag = tag
 		self.trace = {}
 		# intitialize the trace
 		for timestamp,x,y in zip(self.timestamplist,self.xlist,self.ylist):
@@ -137,6 +142,13 @@ class LocTrace(object):
 		SecList.sort()
 		self.starttime = SecList[0]
 		self.endtime = SecList[-1]
+
+	def Refresh(self):
+		SecList = self.trace.keys()
+		SecList.sort()
+		for time in SecList:
+			pass
+
 
 	def __str__(self):
 		SecList = self.trace.keys()
