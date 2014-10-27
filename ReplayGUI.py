@@ -26,7 +26,10 @@ class Controler(DisplayFrame):
 		super(Controler, self).__init__(size,title)
 		# self.label = Label(self.top,text='This is Controler',font = 'Helvetica -12 bold')
 		# self.label.pack(fill=Y, expand=0)
-		
+		self.f_top = Frame(self.top)
+		self.f_top.pack(side=TOP)
+		self.f_bottom = Frame(self.top)
+
 		self.ProgBar = Scale(self.top,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
 		self.ProgBar.pack(fill=X,side=TOP)
 
