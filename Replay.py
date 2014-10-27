@@ -143,11 +143,25 @@ class LocTrace(object):
 		self.starttime = SecList[0]
 		self.endtime = SecList[-1]
 
-	def Refresh(self):
+	def RefreshTrace(self):
 		SecList = self.trace.keys()
 		SecList.sort()
+		self.starttime = SecList[0]
+		self.endtime = SecList[-1]
+		self.timestamplist = []
+		self.xlist = []
+		self.ylist = []
 		for time in SecList:
+			lp = self.trace[time]
+			self.timestamplist.append(lp.timestamp)
+			self.xlist.append(lp.x)
+			self.ylist.append(lp.y)
 			pass
+		self.xmax = max(self.xlist)
+		self.xmin = min(self.xlist)
+		self.ymax = max(self.ylist)
+		self.ymin = min(self.ylist)
+		
 
 
 	def __str__(self):
