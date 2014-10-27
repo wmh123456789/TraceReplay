@@ -42,33 +42,37 @@
 # root2.mainloop()
 
 
-from Tkinter import Tk, Frame, Text, BOTH, X, Y, RIGHT, LEFT, Listbox, N,E,W,S
-from Tkinter.Ttk import Notebook, Button
+# from Tkinter import Tk, Frame, Text, BOTH, X, Y, RIGHT, LEFT, Listbox, N,E,W,S
+# from Tkinter.Ttk import Notebook, Button
 
-root = Tk()
-root.geometry('{}x{}+{}+{}'.format(300, 200, 100, 50))
-root.title('test the ttk.Notebook')
+# root = Tk()
+# root.geometry('{}x{}+{}+{}'.format(300, 200, 100, 50))
+# root.title('test the ttk.Notebook')
 
-nb = Notebook(root)
-nb.pack(fill='both', expand='yes')
+# nb = Notebook(root)
+# nb.pack(fill='both', expand='yes')
 
-# create a child frame for each page
-f1 = Frame(bg = 'red')
-f2 = Frame(bg='blue')
-f3 = Frame(bg='green')
-f1.pack(fill = BOTH, expand = 1)
-claimtext = Text(f1)
-claimtext.insert(1.0, 'Please insert text here...')
-claimtext.grid(sticky = E+W+S+N)
-listbox = Listbox(f1)
-listbox.grid(row = 0, column = 1, sticky = E+W+S+N)
+# # create a child frame for each page
+# f1 = Frame(bg = 'red')
+# f2 = Frame(bg='blue')
+# f3 = Frame(bg='green')
+# f1.pack(fill = BOTH, expand = 1)
+# claimtext = Text(f1)
+# claimtext.insert(1.0, 'Please insert text here...')
+# claimtext.grid(sticky = E+W+S+N)
+# listbox = Listbox(f1)
+# listbox.grid(row = 0, column = 1, sticky = E+W+S+N)
 
-nb.add(f1, text = 'page1')
-nb.add(f2, text = 'page2')
-nb.add(f3, text = 'page3')
+# nb.add(f1, text = 'page1')
+# nb.add(f2, text = 'page2')
+# nb.add(f3, text = 'page3')
 
-# put a button widget on child frame f1 on page1
-#btn1 = Button(f1, text='button1')
-#btn1.pack(side='left', anchor='nw', padx=3, pady=5)
+# # put a button widget on child frame f1 on page1
+# #btn1 = Button(f1, text='button1')
+# #btn1.pack(side='left', anchor='nw', padx=3, pady=5)
 
-root.mainloop()
+# root.mainloop()
+
+b = 33333.1415
+a = '%.2f' %b
+print a

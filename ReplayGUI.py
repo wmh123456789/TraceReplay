@@ -26,20 +26,39 @@ class Controler(DisplayFrame):
 		super(Controler, self).__init__(size,title)
 		# self.label = Label(self.top,text='This is Controler',font = 'Helvetica -12 bold')
 		# self.label.pack(fill=Y, expand=0)
-		self.f_top = Frame(self.top)
-		self.f_top.pack(side=TOP)
+		self.f_text = Frame(self.top)
+		self.f_text.pack(side=TOP,expand=1,fill=X)
+		self.f_bar = Frame(self.top)
+		self.f_bar.pack(side=TOP,expand=1,fill=X)
 		self.f_bottom = Frame(self.top)
+		self.f_bottom.pack(side=BOTTOM,expand=1,fill=X)
 
-		self.ProgBar = Scale(self.top,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
+
+		self.label1 = Label(self.f_text,text='SftX',font = 'Helvetica -12 bold')
+		self.label1.pack(side=LEFT)
+		self.text1 = Text(self.f_text,height=1,width=8)
+		self.text1.pack(side=LEFT)
+		self.label2 = Label(self.f_text,text='SftY',font = 'Helvetica -12 bold')
+		self.label2.pack(side=LEFT)
+		self.text2 = Text(self.f_text,height=1,width=8)
+		self.text2.pack(side=LEFT)
+		self.label3 = Label(self.f_text,text='Scale',font = 'Helvetica -12 bold')
+		self.label3.pack(side=LEFT)
+		self.text3 = Text(self.f_text,height=1,width=8)
+		self.text3.pack(side=LEFT)
+
+
+		self.ProgBar = Scale(self.f_bar,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
 		self.ProgBar.pack(fill=X,side=TOP)
 
-
-		self.Btn_quit = Button(self.top,text='QUIT',command=self.top.quit,activeforeground='white',
+		self.CoordLbl = Label(self.f_bottom,text='xl=0, yl=0; xr=0, yr=0',font = 'Helvetica -12 bold')
+		self.CoordLbl.pack(side=LEFT)
+		self.Btn_quit = Button(self.f_bottom,text='QUIT',command=self.top.quit,activeforeground='white',
 								activebackground='red')
 		self.Btn_quit.pack(side=RIGHT)
 
-		self.Btn_Confirm = Button(self.top,text='Confirm',command = Caller.OnConfirm)
-		self.Btn_Confirm.pack(side=LEFT)
+		self.Btn_Confirm = Button(self.f_bottom,text='Confirm',command = Caller.OnConfirm)
+		self.Btn_Confirm.pack(side=RIGHT)
 
 		# if len(self.TraceList) > 0:
 		# 	TraceLen = TraceList[0].endtime - TraceList[0].starttime
@@ -63,7 +82,9 @@ class ShowPath(DisplayFrame):
 	"""docstring for ShowPath"""
 	def __init__(self,size,title='',mappath='pikachou.jpg'):
 		super(ShowPath, self).__init__(size,title)
-		# TODO insert a map
+		self.SftX = 0.0
+		self.SftY = 0.0
+		self.Scale = 1.0
 		
 		# self.map =PhotoImage(file='pikachou.gif')
 		self.C = Canvas(self.top,
@@ -71,11 +92,12 @@ class ShowPath(DisplayFrame):
 						height= 1024,
 						bg='white')
 		self.Loadmap(mappath)
-		self.recW = 5
-		self.recH = 5
+		self.recW = 15
+		self.recH = 15
 		self.recDict = {}
 		self.recStyle = {'L':['red','green'],'R':['blue','white']}
 		self.C.pack(expand=1)
+
 
 	#reload
 	def AddTrace(self,trace):
@@ -90,7 +112,7 @@ class ShowPath(DisplayFrame):
 	def Loadmap(self,mappath):
 		image = Image.open(mappath) 
 		self.map = ImageTk.PhotoImage(image) 
-		print dir(self.C)
+		# print dir(self.C)
 		self.C.create_image(1280/2,1024/2,image=self.map)
 
 class GUITop(object):
@@ -104,15 +126,16 @@ class GUITop(object):
 		# print str(self.RTrace)
 		# self.arg = arg
 		self.Show = ShowPath('1600x1200','Location Trace','TongFangD19.jpg')
-		self.Con = Controler('300x100','Control Panel',Caller=self)		
+		self.Con = Controler('330x100','Control Panel',Caller=self)		
 		
 		self.Con.AddTrace(self.LTrace)
 		self.Con.AddTrace(self.RTrace)
 		self.Show.AddTrace(self.LTrace)
 		self.Show.AddTrace(self.RTrace)
 		# print len(self.Con.TraceList)
-		self.Con.top.mainloop()
+		
 		self.Show.top.mainloop()
+		self.Con.top.mainloop()
 
 
 	def CheckTraceLength(self,TraceList):
@@ -149,20 +172,23 @@ class GUITop(object):
 		pass
 
 	def OnConfirm(self,ev=None):
-		print 'Confirmed~'
+		self.Show.SftX = float(self.Con.text1.get(1.0,END))
+		self.Show.SftY = float(self.Con.text2.get(1.0,END))
+		self.Show.Scale = float(self.Con.text3.get(1.0,END))
+
 		pass
 
 	def OnProgBarMove(self,ev=None):
 		# print self.Con.ProgBar.get()
-		
 		W = self.Show.recW
 		H = self.Show.recH
 		for trace in self.Show.TraceList:
 			time = trace.starttime + self.Con.ProgBar.get()
-			PosX = trace.trace[time].getX()
-			PosY = trace.trace[time].getY()
+			PosX = trace.trace[time].getX()* self.Show.Scale + self.Show.SftX
+			PosY = trace.trace[time].getY()* self.Show.Scale + self.Show.SftY 
 			rec = self.Show.recDict[trace]
 			self.Show.C.coords(rec,(PosX, PosY, W+PosX, H+PosY))
+		self.Con.CoordLbl.config(text = 'xl=%.1f, yl=%.1f'%(PosX,PosY))
 		return self.Con.ProgBar.get()
 		pass
 

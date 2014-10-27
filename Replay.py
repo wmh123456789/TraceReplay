@@ -120,7 +120,6 @@ class LocPoint(object):
 		pass
 
 
-
 class LocTrace(object):
 	"""docstring for LocTrace"""
 	def __init__(self, arg, tag = 'unknown'):
@@ -195,9 +194,7 @@ class LocTrace(object):
 			start = end
 		pass
 
-
-
-		
+	
 class XMLFile(object):
 	"""docstring for XMLFile"""
 	def __init__(self, filepath):
@@ -208,6 +205,9 @@ class XMLFile(object):
 		self.timestamplist_R, self.Xlist_R, self.Ylist_R = self.GetPointInfo(self.soup,'realp')
 		# self.LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L])
 		# self.RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R])
+
+	def MergeXML(self,xmllist):
+		pass
 
 
 	def ReadXML(self,filepath):
