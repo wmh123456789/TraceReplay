@@ -103,7 +103,6 @@ class LocPoint(object):
 			# print day,hour,minute,second
 			return second+minute*60+hour*3600+day*86400
 	
-
 	def Sec2Timestamp(self,sec,yyyymm):
 		if len(yyyymm) != 6:
 			print 'ERROR: The format of the timestamp head is not "YYYYMM"'
@@ -224,8 +223,6 @@ class XMLFile(object):
 		Xlist = [P['posx'] for P in LoctP]
 		Ylist = [P['posy'] for P in LoctP]
 		return TimeStampList,Xlist,Ylist
-
-
 
 
 def main():

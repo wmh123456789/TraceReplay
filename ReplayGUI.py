@@ -24,8 +24,8 @@ class Controler(DisplayFrame):
 	"""docstring for Controler"""
 	def __init__(self,size,title='',Caller=None):
 		super(Controler, self).__init__(size,title)
-		# self.label = Label(self.top,text='This is Controler',font = 'Helvetica -12 bold')
-		# self.label.pack(fill=Y, expand=0)
+		
+		# Frames
 		self.f_text = Frame(self.top)
 		self.f_text.pack(side=TOP,expand=1,fill=X)
 		self.f_bar = Frame(self.top)
@@ -33,7 +33,7 @@ class Controler(DisplayFrame):
 		self.f_bottom = Frame(self.top)
 		self.f_bottom.pack(side=BOTTOM,expand=1,fill=X)
 
-
+		# Parameters and configure
 		self.label1 = Label(self.f_text,text='SftX',font = 'Helvetica -12 bold')
 		self.label1.pack(side=LEFT)
 		self.text1 = Text(self.f_text,height=1,width=8)
@@ -47,25 +47,22 @@ class Controler(DisplayFrame):
 		self.text3 = Text(self.f_text,height=1,width=8)
 		self.text3.pack(side=LEFT)
 
-
+		# Prograss Bar
 		self.ProgBar = Scale(self.f_bar,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
 		self.ProgBar.pack(fill=X,side=TOP)
 
+		# Status show
 		self.CoordLbl = Label(self.f_bottom,text='xl=0, yl=0; xr=0, yr=0',font = 'Helvetica -12 bold')
 		self.CoordLbl.pack(side=LEFT)
+
+		# Buttons
 		self.Btn_quit = Button(self.f_bottom,text='QUIT',command=self.top.quit,activeforeground='white',
 								activebackground='red')
 		self.Btn_quit.pack(side=RIGHT)
 
-		self.Btn_Confirm = Button(self.f_bottom,text='Confirm',command = Caller.OnConfirm)
+		self.Btn_Confirm = Button(self.f_text,text='Confirm',command = Caller.OnConfirm)
 		self.Btn_Confirm.pack(side=RIGHT)
 
-		# if len(self.TraceList) > 0:
-		# 	TraceLen = TraceList[0].endtime - TraceList[0].starttime
-		# else:
-		# 	TraceLen = 1
-		# 	print 'Warning: No trace is Added'
-				
 
 		# self.TracePath1 = Text(self.top)
 		# self.input1.pack()
@@ -82,11 +79,12 @@ class ShowPath(DisplayFrame):
 	"""docstring for ShowPath"""
 	def __init__(self,size,title='',mappath='pikachou.jpg'):
 		super(ShowPath, self).__init__(size,title)
-		self.SftX = 0.0
-		self.SftY = 0.0
-		self.Scale = 1.0
-		
-		# self.map =PhotoImage(file='pikachou.gif')
+		self.SftX = 145.0
+		self.SftY = 80.0
+		self.Scale = 18.8
+		self.OffsetX = 0.0
+		self.OffsetY = 0.0
+
 		self.C = Canvas(self.top,
 						width= 1280,
 						height= 1024,
@@ -126,7 +124,7 @@ class GUITop(object):
 		# print str(self.RTrace)
 		# self.arg = arg
 		self.Show = ShowPath('1600x1200','Location Trace','TongFangD19.jpg')
-		self.Con = Controler('330x100','Control Panel',Caller=self)		
+		self.Con = Controler('400x100','Control Panel',Caller=self)		
 		
 		self.Con.AddTrace(self.LTrace)
 		self.Con.AddTrace(self.RTrace)
@@ -182,22 +180,30 @@ class GUITop(object):
 		# print self.Con.ProgBar.get()
 		W = self.Show.recW
 		H = self.Show.recH
+
 		for trace in self.Show.TraceList:
 			time = trace.starttime + self.Con.ProgBar.get()
-			PosX = trace.trace[time].getX()* self.Show.Scale + self.Show.SftX
-			PosY = trace.trace[time].getY()* self.Show.Scale + self.Show.SftY 
+			PosX = (trace.trace[time].getX()* self.Show.Scale + self.Show.SftX)  
+			PosY = (-1*trace.trace[time].getY()* self.Show.Scale + self.Show.SftY)  
 			rec = self.Show.recDict[trace]
 			self.Show.C.coords(rec,(PosX, PosY, W+PosX, H+PosY))
-		self.Con.CoordLbl.config(text = 'xl=%.1f, yl=%.1f'%(PosX,PosY))
+		# self.Con.CoordLbl.config(text = 'xl=%.1f, yl=%.1f'%(PosX,PosY))
+		# ErrorDist = self.CalDist(float(self.Show.TraceList[0].trace[time].getX),
+		# 						float(self.Show.TraceList[0].trace[time].getY),
+		# 						float(self.Show.TraceList[1].trace[time].getX),
+		# 						float(self.Show.TraceList[1].trace[time].getY))
+		# self.Con.CoordLbl.config(text = 'ErrorDst=%.2f'%(ErrorDst))
 		return self.Con.ProgBar.get()
 		pass
 
-
+	def CalDist(self,x1,y1,x2,y2):
+		 return ((x1-x2) **2 +(y1-y2)**2) **0.5
 
 def main():
 	
 	rootpath = 'E:\= Workspaces\Git\TraceReplay\LocateRecord'
-	filename = '\\10100120_101001200004_20141017132945_1.xml'
+	# filename = '\\10100120_101001200004_20141017132945_1.xml'
+	filename = '\\test0.xml'
 	lp = LocPoint(['20141017132946','114.0','36.9'])
 	xml = XMLFile(rootpath+filename)
 	LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L],tag='L')

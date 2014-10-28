@@ -73,6 +73,3 @@
 
 # root.mainloop()
 
-b = 33333.1415
-a = '%.2f' %b
-print a
