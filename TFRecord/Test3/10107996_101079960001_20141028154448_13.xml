@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="GB2312"?><recode bid="10107996" floorID="101079960001" startTime="20141028154442" endTime="20141028154448">
+  <LocationPoints>
+    <LoctP timestamp="20141028154442" posX="4.0" posY="-31.9"/>
+    <LoctP timestamp="20141028154444" posX="4.0" posY="-31.9"/>
+    <LoctP timestamp="20141028154445" posX="5.0" posY="-32.9"/>
+    <LoctP timestamp="20141028154447" posX="6.0" posY="-33.9"/>
+    <LoctP timestamp="20141028154448" posX="6.0" posY="-33.9"/>
+  </LocationPoints>
+  <RealPoints id="13">
+    <RealP timestamp="20141028154442" posX="8.275119" posY="-31.18565"/>
+    <RealP timestamp="20141028154448" posX="8.160407" posY="-34.99023"/>
+  </RealPoints>
+</recode>

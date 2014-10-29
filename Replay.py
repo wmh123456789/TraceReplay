@@ -1,4 +1,5 @@
 from Tkinter import *
+import os
 from bs4 import BeautifulSoup 
 
 def TestData():
@@ -85,11 +86,11 @@ class LocPoint(object):
 
 	def getX(self):
 		# print self.x
-		return self.x
+		return float(self.x)
 
 	def getY(self):
 		# print self.y
-		return self.y	
+		return float(self.y)	
 
 	def Timestamp2Sec(self,timestamp):
 		if len(timestamp) != self.TIMESTAMPLENGTH:
@@ -166,11 +167,21 @@ class LocTrace(object):
 		SecList = self.trace.keys()
 		SecList.sort()
 		string = ''
+		# for i in SecList:
+		# 	# string+= 'timestamp='+self.trace[i].timestamp
+		# 	string+= 'Time='+ str(self.trace[i].sec)
+		# 	string+= '\tposX=%.1f'%self.trace[i].x
+		# 	string+= '\tposY=%.1f'%self.trace[i].y
+		# 	string+= '\n'
+
+
 		for i in SecList:
-			string+= 'timestamp='+self.trace[i].timestamp
-			string+= '\tposX='+str(self.trace[i].x)
-			string+= '\tposY='+str(self.trace[i].y)
+			# string+= 'timestamp='+self.trace[i].timestamp
+			string+= str(self.trace[i].sec)
+			string+= '\t%.1f'%self.trace[i].x
+			string+= '\t%.1f'%self.trace[i].y
 			string+= '\n'
+
 		return string
 		pass
 
@@ -199,14 +210,27 @@ class XMLFile(object):
 	def __init__(self, filepath):
 		super(XMLFile, self).__init__()
 		self.filepath = filepath
-		self.soup = self.ReadXML(self.filepath)
+		if os.path.isdir(filepath):
+			self.soup = self.MergeXMLDir(self.filepath)
+		else:
+			self.soup = self.ReadXML(self.filepath)
 		self.timestamplist_L, self.Xlist_L, self.Ylist_L = self.GetPointInfo(self.soup,'loctp')
 		self.timestamplist_R, self.Xlist_R, self.Ylist_R = self.GetPointInfo(self.soup,'realp')
 		# self.LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L])
 		# self.RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R])
 
-	def MergeXML(self,xmllist):
+	def MergeXMLList(self,xmllist):
 		pass
+
+	def MergeXMLDir(self,xmldir):
+		FileText = ''
+		FileLines = []
+		for xml in os.listdir(xmldir):
+			xmlfile = os.path.join(xmldir,xml)
+			FileLines += open(xmlfile,'r').readlines()
+			pass
+		FileText = ' '.join(FileLines)
+		return BeautifulSoup(FileText.decode('GB2312').encode('utf8'))
 
 
 	def ReadXML(self,filepath):
@@ -226,10 +250,13 @@ class XMLFile(object):
 
 
 def main():
-	rootpath = 'E:\= Workspaces\Git\TraceReplay\LocateRecord'
+	rootpath = './TFRecord\Test2'
 	filename = '\\10100120_101001200004_20141017132945_1.xml'
 	lp = LocPoint(['20141017132946','114.0','36.9'])
-	xml = XMLFile(rootpath+filename)
+	# xml = XMLFile(rootpath+filename)
+	xml = XMLFile(rootpath)
+
+
 	LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L])
 	RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R])
 	LTrace.LinearInterpolation()

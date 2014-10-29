@@ -1,0 +1,11 @@
+Location delay ralated:
+"Delay ajust"
+"Auto delay detection"
+
+File Load ralated:
+"File load dailog"
+
+Display ralated:
+"Clear button"
+"Trace/Point mode"
+"Map-param auto fit"

@@ -132,6 +132,11 @@ class GUITop(object):
 		self.Show.AddTrace(self.RTrace)
 		# print len(self.Con.TraceList)
 		
+
+		self.TotalErr = 0.0
+		self.TotalPts = 0
+		self.AvgErr = 0.0
+
 		self.Show.top.mainloop()
 		self.Con.top.mainloop()
 
@@ -187,31 +192,51 @@ class GUITop(object):
 			PosY = (-1*trace.trace[time].getY()* self.Show.Scale + self.Show.SftY)  
 			rec = self.Show.recDict[trace]
 			self.Show.C.coords(rec,(PosX, PosY, W+PosX, H+PosY))
+
+			# Keep a trace on map 
+			if '1' in self.Con.text3.get(1.0,END):
+				self.Show.C.create_rectangle(PosX, PosY, W+PosX, H+PosY, 
+							fill=self.Show.recStyle[trace.tag][0], 
+							outline=self.Show.recStyle[trace.tag][1])
 		# self.Con.CoordLbl.config(text = 'xl=%.1f, yl=%.1f'%(PosX,PosY))
-		# ErrorDist = self.CalDist(float(self.Show.TraceList[0].trace[time].getX),
-		# 						float(self.Show.TraceList[0].trace[time].getY),
-		# 						float(self.Show.TraceList[1].trace[time].getX),
-		# 						float(self.Show.TraceList[1].trace[time].getY))
-		# self.Con.CoordLbl.config(text = 'ErrorDst=%.2f'%(ErrorDst))
+		# print str(self.Show.TraceList[0].trace[time].x)
+
+		# Error Calculation
+		ErrorDist = self.CalcDist(float(self.Show.TraceList[0].trace[time].x),
+								float(self.Show.TraceList[0].trace[time].y),
+								float(self.Show.TraceList[1].trace[time].x),
+								float(self.Show.TraceList[1].trace[time].y))
+		self.TotalErr += ErrorDist
+		self.TotalPts += 1
+		self.AvgErr = float(self.TotalErr/self.TotalPts)
+		self.Con.CoordLbl.config(text = 'ErrorDst=%.2f; AvgErr=%.3f'%(ErrorDist,self.AvgErr))
+
 		return self.Con.ProgBar.get()
 		pass
 
-	def CalDist(self,x1,y1,x2,y2):
+	def CalcDist(self,x1,y1,x2,y2):
 		 return ((x1-x2) **2 +(y1-y2)**2) **0.5
 
 def main():
 	
-	rootpath = 'E:\= Workspaces\Git\TraceReplay\LocateRecord'
+	rootpath = '.\TFRecord\Test2'
 	# filename = '\\10100120_101001200004_20141017132945_1.xml'
-	filename = '\\test0.xml'
+	filename = '\Test2\Test2.xml'
 	lp = LocPoint(['20141017132946','114.0','36.9'])
-	xml = XMLFile(rootpath+filename)
+	# xml = XMLFile(rootpath+filename)
+	xml = XMLFile(rootpath)
 	LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L],tag='L')
 	RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R],tag='R')
 	LTrace.LinearInterpolation()
 	RTrace.LinearInterpolation()
-	# print str(RTrace)
+	
+	print '\n----===== Real  Path =====----\n'
+	print str(RTrace)
+	print '\n----===== Locate Path =====----\n'
+	print str(LTrace)
 	# print LTrace.trace[LTrace.starttime].getTimeStamp()
+	
+
 	G = GUITop(LTrace,RTrace)
 
 
