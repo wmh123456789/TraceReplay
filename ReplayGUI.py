@@ -188,18 +188,27 @@ class GUITop(object):
 
 		for trace in self.Show.TraceList:
 			time = trace.starttime + self.Con.ProgBar.get()
-			PosX = (trace.trace[time].getX()* self.Show.Scale + self.Show.SftX)  
-			PosY = (-1*trace.trace[time].getY()* self.Show.Scale + self.Show.SftY)  
+			PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
+			PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
 			rec = self.Show.recDict[trace]
-			self.Show.C.coords(rec,(PosX, PosY, W+PosX, H+PosY))
+			self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
 			# Keep a trace on map 
-			if '1' in self.Con.text3.get(1.0,END):
-				self.Show.C.create_rectangle(PosX, PosY, W+PosX, H+PosY, 
+			if '1' in self.Con.text3.get(1.0,END):     # Points mode
+				self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
 							fill=self.Show.recStyle[trace.tag][0], 
 							outline=self.Show.recStyle[trace.tag][1])
-		# self.Con.CoordLbl.config(text = 'xl=%.1f, yl=%.1f'%(PosX,PosY))
-		# print str(self.Show.TraceList[0].trace[time].x)
+			if '2' in self.Con.text3.get(1.0,END):    # Lines mode
+				if time > trace.starttime:
+					#ToDo: Draw a line 
+					self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time))
+					pass
+			if '3' in  self.Con.text3.get(1.0,END):    # Tag on trace
+				#TODO: add a tag on the current point
+				pass
+
+
+
 
 		# Error Calculation
 		ErrorDist = self.CalcDist(float(self.Show.TraceList[0].trace[time].x),

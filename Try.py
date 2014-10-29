@@ -10,7 +10,8 @@
 # D = {1:'a',2:'b',3:'c'}
 # D.pop(2)
 
-
+A = lambda x,y:x+y
+print A(1,2)
 
 
 # image = Image.open("pikachou.jpg")
