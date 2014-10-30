@@ -9,3 +9,4 @@ Display ralated:
 "Clear button"
 "Trace/Point mode"
 "Map-param auto fit"
+"Show a scale on map"
