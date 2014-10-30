@@ -271,7 +271,7 @@ class GUITop(object):
 
 def main():
 	
-	rootpath = '.\TFRecord\Test2'
+	rootpath = '.\TFRecord\RawFiles\Point9'
 	# filename = '\\10100120_101001200004_20141017132945_1.xml'
 	filename = '\Test2\Test2.xml'
 	lp = LocPoint(['20141017132946','114.0','36.9'])

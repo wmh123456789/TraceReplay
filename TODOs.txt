@@ -10,3 +10,4 @@ Display ralated:
 "Trace/Point mode"
 "Map-param auto fit"
 "Show a scale on map"
+"Forward Button"
