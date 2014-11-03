@@ -10,7 +10,6 @@ class DisplayFrame(object):
 		self.top = Tk()
 		self.top.geometry(size)
 		self.top.title(title)
-		
 		self.TraceList = []
 		print 'DisplayFrame is loaded'
 
@@ -30,62 +29,85 @@ class Controler(DisplayFrame):
 		super(Controler, self).__init__(size,title)
 		
 		# Frames
-		self.f_text = Frame(self.top)
-		self.f_text.pack(side=TOP,expand=1,fill=X)
-		self.f_config = Frame(self.top)
-		self.f_config.pack(side=TOP,expand=1,fill=X)
+		self.initFrame(Caller)
+		# Canvas configure(Shift, Scale)
+		self.initCanvas(Caller)
+		# Trace option
+		self.initTraceOpt(Caller)
+		# Map related
+		self.initMap(Caller)
+		# Prograss Bar
+		self.initPrograssBar(Caller)
+		# Status show
+		self.initStatus(Caller)
+		# Buttons
+		self.initButtons(Caller)
+
+	def initFrame(self,Caller):
+		# Create Frames
+		self.f_CanOpt = Frame(self.top)
+		self.f_TrcOpt = Frame(self.top)
 		self.f_bar = Frame(self.top)
-		self.f_bar.pack(side=TOP,expand=1,fill=X)
 		self.f_bottom = Frame(self.top)
+		self.f_map = Frame(self.top)
+		# Pack Frames
+		self.f_CanOpt.pack(side=TOP,expand=1,fill=X)
+		self.f_TrcOpt.pack(side=TOP,expand=1,fill=X)
+		self.f_map.pack(side=TOP,expand=1,fill=X)
+		self.f_bar.pack(side=TOP,expand=1,fill=X)
 		self.f_bottom.pack(side=BOTTOM,expand=1,fill=X)
 
-		# Canvas configure(Shift, Scale)
-		self.label1 = Label(self.f_text,text='SftX',font = 'Helvetica -12 bold')
+
+	def initCanvas(self,Caller):
+		self.label1 = Label(self.f_CanOpt,text='SftX',font = 'Helvetica -12 bold')
 		self.label1.pack(side=LEFT)
-		self.text1 = Text(self.f_text,height=1,width=9)
+		self.text1 = Text(self.f_CanOpt,height=1,width=9)
 		self.text1.pack(side=LEFT)
-		self.label2 = Label(self.f_text,text='SftY',font = 'Helvetica -12 bold')
+		self.label2 = Label(self.f_CanOpt,text='SftY',font = 'Helvetica -12 bold')
 		self.label2.pack(side=LEFT)
-		self.text2 = Text(self.f_text,height=1,width=9)
+		self.text2 = Text(self.f_CanOpt,height=1,width=9)
 		self.text2.pack(side=LEFT)
-		self.label3 = Label(self.f_text,text='Scale',font = 'Helvetica -12 bold')
+		self.label3 = Label(self.f_CanOpt,text='Scale',font = 'Helvetica -12 bold')
 		self.label3.pack(side=LEFT)
-		self.text3 = Text(self.f_text,height=1,width=9)
+		self.text3 = Text(self.f_CanOpt,height=1,width=9)
 		self.text3.pack(side=LEFT)
-		self.Btn_Confirm = Button(self.f_text,text='Confirm',command = Caller.OnConfirm)
+		self.Btn_Confirm = Button(self.f_CanOpt,text='Confirm',command = Caller.OnConfirm)
 		self.Btn_Confirm.pack(side=RIGHT)
 
-		# Trace option
-		self.lb_tracepath = Label(self.f_config,text='TracePath',font = 'Helvetica -12 bold')
+	def initTraceOpt(self,Caller):
+		self.lb_tracepath = Label(self.f_TrcOpt,text='TracePath',font = 'Helvetica -12 bold')
 		self.lb_tracepath.pack(side=LEFT)
-		self.tx_tracepath = Text(self.f_config,height=1,width=22)
+		self.tx_tracepath = Text(self.f_TrcOpt,height=1,width=22)
 		self.tx_tracepath.pack(side=LEFT)
-		self.lb_opt = Label(self.f_config,text='TraceMode',font = 'Helvetica -12 bold')
+		self.lb_opt = Label(self.f_TrcOpt,text='TraceMode',font = 'Helvetica -12 bold')
 		self.lb_opt.pack(side=LEFT)
-		self.tx_opt = Text(self.f_config,height=1,width=2)
+		self.tx_opt = Text(self.f_TrcOpt,height=1,width=2)
 		self.tx_opt.pack(side=LEFT)
-		self.Btn_reload = Button(self.f_config,text='Reload',command = Caller.OnReloadTrace)
+		self.Btn_reload = Button(self.f_TrcOpt,text='Reload',command = Caller.OnReloadTrace)
 		self.Btn_reload.pack(side=RIGHT)
 
-		# Prograss Bar
+	def initMap(self,Caller):
+		self.lb_mappath = Label(self.f_map,text='MapPath',font = 'Helvetica -12 bold')
+		self.lb_mappath.pack(side=LEFT)
+		self.tx_mappath = Text(self.f_map,height=1,width=22)
+		self.tx_mappath.pack(side=LEFT)
+		self.lb_mappath = Label(self.f_map,text='Floor',font = 'Helvetica -12 bold')
+		self.lb_mappath.pack(side=LEFT)
+		self.Btn_loadmap = Button(self.f_map,text='Load',command = Caller.OnLoadMap)
+		self.Btn_loadmap.pack(side=RIGHT)
+
+	def initPrograssBar(self,Caller):
 		self.ProgBar = Scale(self.f_bar,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
 		self.ProgBar.pack(fill=X,side=TOP)
 
-		# Status show
+	def initStatus(self,Caller):
 		self.CoordLbl = Label(self.f_bottom,text='xl=0, yl=0; xr=0, yr=0',font = 'Helvetica -12 bold')
 		self.CoordLbl.pack(side=LEFT)
 
-		# Buttons
+	def initButtons(self,Caller):
 		self.Btn_quit = Button(self.f_bottom,text='QUIT',command=self.top.quit,activeforeground='white',
 								activebackground='red')
 		self.Btn_quit.pack(side=RIGHT)
-
-		
-
-
-		# self.TracePath1 = Text(self.top)
-		# self.input1.pack()
-		# self.TracePath2 = Text(se)
 
 
 	def AddTrace(self,trace):
@@ -96,19 +118,21 @@ class Controler(DisplayFrame):
 
 class ShowPath(DisplayFrame):
 	"""docstring for ShowPath"""
-	def __init__(self,size,title='',mappath='pikachou.jpg'):
+	def __init__(self,size,title='',Caller=None):
 		super(ShowPath, self).__init__(size,title)
-		self.SftX = 145.0
-		self.SftY = 80.0
-		self.Scale = 18.8
-		self.OffsetX = 0.0
-		self.OffsetY = 0.0
+		self.CurrFlr = Caller.CurrFlr
+		self.MapParam = Caller.MapParam 
+		self.SftX = self.MapParam[self.CurrFlr]['X']
+		self.SftY = self.MapParam[self.CurrFlr]['H'] - self.MapParam[self.CurrFlr]['Y']
+		self.Scale  = self.MapParam[self.CurrFlr]['K']
+		self.width  = self.MapParam[self.CurrFlr]['W']
+		self.height = self.MapParam[self.CurrFlr]['H']
 
 		self.C = Canvas(self.top,
-						width= 1280,
-						height= 1024,
+						width= self.width,
+						height= self.height,
 						bg='white')
-		self.Loadmap(mappath)
+		self.Loadmap(Caller.MapPath)
 		self.recW = 15
 		self.recH = 15
 		self.recDict = {}
@@ -130,35 +154,62 @@ class ShowPath(DisplayFrame):
 		image = Image.open(mappath) 
 		self.map = ImageTk.PhotoImage(image) 
 		# print dir(self.C)
-		self.C.create_image(1280/2,1024/2,image=self.map)
+		self.C.create_image(self.width/2,self.height/2,image=self.map)
 
 class GUITop(object):
 	"""docstring for GUITop"""
-	def __init__(self,LTrace,RTrace,TracePath=''):
+	def __init__(self,LTrace,RTrace,MapParamPath = '',TracePath=''):
 		super(GUITop, self).__init__()
 		self.LTrace = LTrace
 		self.RTrace = RTrace
 		self.TracePath = TracePath
+		self.MapParam = self.ParseMapParam(MapParamPath)
 		self.FitTwoTraces(self.LTrace,self.RTrace)
-		# print str(self.LTrace), '\n\n'
-		# print str(self.RTrace)
-		# self.arg = arg
-		self.Show = ShowPath('1600x1200','Location Trace','TongFangD19.jpg')
-		self.Con = Controler('450x150','Control Panel',Caller=self)		
+		self.MapPath = 'TongFangD19_Floor_F19.png'
+		self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
+
+		self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt'],'Location Trace',Caller=self)
+		self.Con = Controler('450x180','Control Panel',Caller=self)		
 		
+		# Add traces
 		self.Con.AddTrace(self.LTrace)
 		self.Con.AddTrace(self.RTrace)
 		self.Show.AddTrace(self.LTrace)
 		self.Show.AddTrace(self.RTrace)
-		# print len(self.Con.TraceList)
-		
-
+	
+		# Data analysis
 		self.TotalErr = 0.0
 		self.TotalPts = 0
 		self.AvgErr = 0.0
 
+
+		# Start windows
 		self.Show.top.mainloop()
 		self.Con.top.mainloop()
+
+
+	'''
+	Parse the mpa params from .params file:
+	Each line of .params file: BldName FlrName W H X Y K
+	In the ShowPath class, coordinates of each locat point(lx,ly) is (px,py):
+		px =  lx*K+X
+		py = -ly*K+(H-Y)
+	'''
+	def ParseMapParam(self,ParamFile):
+		lines = open(ParamFile).readlines()
+		params = {}
+		for line in lines:
+			text = line.split('\t')
+			param = {'BldName':text[0],
+						'FlrName':text[1],
+						'W':int(text[2]),
+						'H':int(text[3]),
+						'X':int(text[4]),
+						'Y':int(text[5]),
+						'K':float(text[6]),
+						'sizeTxt':text[2]+'x'+text[3]}
+			params.update({param['FlrName']:param})
+		return params
 
 
 	def CheckTraceLength(self,TraceList):
@@ -213,7 +264,12 @@ class GUITop(object):
 
 		pass
 
-
+	def OnLoadMap(self,ev=None):
+		# Load map params
+		
+		# Load floor list
+		
+		pass
 
 	def OnConfirm(self,ev=None):
 		self.Show.SftX = float(self.Con.text1.get(1.0,END))
@@ -250,9 +306,6 @@ class GUITop(object):
 				#TODO: add a tag on the current point
 				pass
 
-
-
-
 		# Error Calculation
 		ErrorDist = self.CalcDist(float(self.Show.TraceList[0].trace[time].x),
 								float(self.Show.TraceList[0].trace[time].y),
@@ -271,28 +324,25 @@ class GUITop(object):
 
 def main():
 	
-	rootpath = '.\TFRecord\RawFiles\Test2'
-	# filename = '\\10100120_101001200004_20141017132945_1.xml'
-	filename = '\Test2\Test2.xml'
-	lp = LocPoint(['20141017132946','114.0','36.9'])
-	# xml = XMLFile(rootpath+filename)
+	# rootpath = '.\TFRecord\RawFiles\Test2'
+	rootpath = r'E:\= Workspaces\Git\TraceReplay\LocateRecord\test.xml'
+	# filename = '\Test2\Test2.xml'
 	xml = XMLFile(rootpath)
 	LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L],tag='L')
 	RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R],tag='R')
 	LTrace.LinearInterpolation()
 	RTrace.LinearInterpolation()
 	
-	print '\n----===== Real  Path =====----\n'
-	print str(RTrace)
-	print '\n----===== Locate Path =====----\n'
-	print str(LTrace)
+	# Print the Raw Trace data
+	# print '\n----===== Real  Path =====----\n'
+	# print str(RTrace)
+	# print '\n----===== Locate Path =====----\n'
+	# print str(LTrace)
 	# print LTrace.trace[LTrace.starttime].getTimeStamp()
 	
-
-	G = GUITop(LTrace,RTrace)
-
-
-	pass
+	ParamFile = r'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK\TongFangD19\Binary\TongFangD19.binary.params'
+	G = GUITop(LTrace,RTrace,ParamFile)
+	
 
 if __name__ == "__main__":
 	
