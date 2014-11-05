@@ -43,6 +43,10 @@ class Controler(DisplayFrame):
 		# Buttons
 		self.initButtons(Caller)
 
+
+	def initMenu(self,Caller):
+		pass
+
 	def initFrame(self,Caller):
 		# Create Frames
 		self.f_CanOpt = Frame(self.top)
@@ -71,8 +75,8 @@ class Controler(DisplayFrame):
 		self.label3.pack(side=LEFT)
 		self.text3 = Text(self.f_CanOpt,height=1,width=9)
 		self.text3.pack(side=LEFT)
-		self.Btn_Confirm = Button(self.f_CanOpt,text='Confirm',command = Caller.OnConfirm)
-		self.Btn_Confirm.pack(side=RIGHT)
+		self.btn_Confirm = Button(self.f_CanOpt,text='Confirm',command = Caller.OnConfirm)
+		self.btn_Confirm.pack(side=RIGHT)
 
 	def initTraceOpt(self,Caller):
 		self.lb_tracepath = Label(self.f_TrcOpt,text='TracePath',font = 'Helvetica -12 bold')
@@ -83,18 +87,20 @@ class Controler(DisplayFrame):
 		self.lb_opt.pack(side=LEFT)
 		self.tx_opt = Text(self.f_TrcOpt,height=1,width=2)
 		self.tx_opt.pack(side=LEFT)
-		self.Btn_reload = Button(self.f_TrcOpt,text='Reload',command = Caller.OnReloadTrace)
-		self.Btn_reload.pack(side=RIGHT)
+		self.btn_reload = Button(self.f_TrcOpt,text='Reload',command = Caller.OnReloadTrace)
+		self.btn_reload.pack(side=RIGHT)
 
 	def initMap(self,Caller):
 		self.lb_mappath = Label(self.f_map,text='MapPath',font = 'Helvetica -12 bold')
 		self.lb_mappath.pack(side=LEFT)
 		self.tx_mappath = Text(self.f_map,height=1,width=22)
 		self.tx_mappath.pack(side=LEFT)
-		self.lb_mappath = Label(self.f_map,text='Floor',font = 'Helvetica -12 bold')
-		self.lb_mappath.pack(side=LEFT)
-		self.Btn_loadmap = Button(self.f_map,text='Load',command = Caller.OnLoadMap)
-		self.Btn_loadmap.pack(side=RIGHT)
+		self.btn_openmpr = Button(self.f_map,text='...',command = Caller.OnOpenMapParamPath)
+		self.btn_openmpr.pack(side=LEFT)
+		self.lb_floorid = Label(self.f_map,text='Floor',font = 'Helvetica -12 bold')
+		self.lb_floorid.pack(side=LEFT)
+		self.btn_loadmap = Button(self.f_map,text='Load',command = Caller.OnLoadMap)
+		self.btn_loadmap.pack(side=RIGHT)
 
 	def initPrograssBar(self,Caller):
 		self.ProgBar = Scale(self.f_bar,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
@@ -105,9 +111,9 @@ class Controler(DisplayFrame):
 		self.CoordLbl.pack(side=LEFT)
 
 	def initButtons(self,Caller):
-		self.Btn_quit = Button(self.f_bottom,text='QUIT',command=self.top.quit,activeforeground='white',
+		self.btn_quit = Button(self.f_bottom,text='QUIT',command=self.top.quit,activeforeground='white',
 								activebackground='red')
-		self.Btn_quit.pack(side=RIGHT)
+		self.btn_quit.pack(side=RIGHT)
 
 
 	def AddTrace(self,trace):
@@ -163,7 +169,8 @@ class GUITop(object):
 		self.LTrace = LTrace
 		self.RTrace = RTrace
 		self.TracePath = TracePath
-		self.MapParam = self.ParseMapParam(MapParamPath)
+		self.MapParamPath = MapParamPath
+		self.MapParam = self.ParseMapParam(self.MapParamPath)
 		self.FitTwoTraces(self.LTrace,self.RTrace)
 		self.MapPath = 'TongFangD19_Floor_F19.png'
 		self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
@@ -264,6 +271,23 @@ class GUITop(object):
 
 		pass
 
+
+	def LoadPathLog(self,logpath):
+		if os.path.isfile(logpath):
+			return open(logpath).read()
+		else:
+			print 'Error:Cannot find the log file:',logpath
+			return 'C:/'
+	def SavePathLog(self,log,logpath):
+		fp=open(logpath,'w')
+		fp.write(log)
+		fp.close()
+
+	def OnOpenMapParamPath(self,ev=None):
+		initdir = self.LoadPathLog('MapParamPath.log')
+		self.MapParamPath = tkFileDialog.askopenfilename(initialdir = initdir)
+		self.SavePathLog(self.MapParamPath,'MapParamPath.log')
+
 	def OnLoadMap(self,ev=None):
 		# Load map params
 		
@@ -326,7 +350,9 @@ def main():
 	
 	# rootpath = '.\TFRecord\RawFiles\Test2'
 	rootpath = r'E:\= Workspaces\Git\TraceReplay\LocateRecord\test.xml'
-	# filename = '\Test2\Test2.xml'
+	MallName = 'TongFangD19'
+	ParamFile = r'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK\\'+MallName+r'\Binary\\'+MallName+r'.binary.params'
+
 	xml = XMLFile(rootpath)
 	LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L],tag='L')
 	RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R],tag='R')
@@ -340,7 +366,7 @@ def main():
 	# print str(LTrace)
 	# print LTrace.trace[LTrace.starttime].getTimeStamp()
 	
-	ParamFile = r'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK\TongFangD19\Binary\TongFangD19.binary.params'
+	
 	G = GUITop(LTrace,RTrace,ParamFile)
 	
 
