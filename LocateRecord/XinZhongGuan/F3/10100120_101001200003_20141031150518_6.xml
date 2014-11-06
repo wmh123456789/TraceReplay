@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="GB2312"?><recode bid="10100120" floorID="101001200003" startTime="20141031150447" endTime="20141031150518">
+  <LocationPoints>
+    <LoctP timestamp="20141031150448" posX="108.3" posY="38.2"/>
+    <LoctP timestamp="20141031150449" posX="108.3" posY="41.2"/>
+    <LoctP timestamp="20141031150451" posX="108.3" posY="42.2"/>
+    <LoctP timestamp="20141031150452" posX="110.3" posY="38.2"/>
+    <LoctP timestamp="20141031150453" posX="113.3" posY="35.2"/>
+    <LoctP timestamp="20141031150454" posX="118.3" posY="29.2"/>
+    <LoctP timestamp="20141031150456" posX="120.3" posY="31.2"/>
+    <LoctP timestamp="20141031150457" posX="121.3" posY="33.2"/>
+    <LoctP timestamp="20141031150458" posX="121.3" posY="35.2"/>
+    <LoctP timestamp="20141031150459" posX="121.3" posY="36.2"/>
+    <LoctP timestamp="20141031150501" posX="122.3" posY="37.2"/>
+    <LoctP timestamp="20141031150503" posX="131.3" posY="40.2"/>
+    <LoctP timestamp="20141031150504" posX="130.3" posY="39.2"/>
+    <LoctP timestamp="20141031150505" posX="120.3" posY="39.2"/>
+    <LoctP timestamp="20141031150506" posX="113.3" posY="43.2"/>
+    <LoctP timestamp="20141031150508" posX="109.3" posY="45.2"/>
+    <LoctP timestamp="20141031150509" posX="108.3" posY="46.2"/>
+    <LoctP timestamp="20141031150510" posX="96.3" posY="47.2"/>
+    <LoctP timestamp="20141031150511" posX="93.3" posY="46.2"/>
+    <LoctP timestamp="20141031150513" posX="94.3" posY="45.2"/>
+    <LoctP timestamp="20141031150514" posX="94.3" posY="45.2"/>
+    <LoctP timestamp="20141031150516" posX="93.3" posY="46.2"/>
+    <LoctP timestamp="20141031150517" posX="94.3" posY="44.2"/>
+  </LocationPoints>
+  <RealPoints id="6">
+    <RealP timestamp="20141031150447" posX="118.38764" posY="38.625782"/>
+    <RealP timestamp="20141031150518" posX="132.51186" posY="44.140507"/>
+  </RealPoints>
+</recode>

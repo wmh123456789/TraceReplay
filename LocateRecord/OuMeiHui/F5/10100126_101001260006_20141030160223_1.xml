@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="GB2312"?><recode bid="10100126" floorID="101001260006" startTime="20141030160144" endTime="20141030160223">
+  <LocationPoints>
+    <LoctP timestamp="20141030160145" posX="40.6" posY="63.4"/>
+    <LoctP timestamp="20141030160146" posX="39.6" posY="63.4"/>
+    <LoctP timestamp="20141030160148" posX="40.6" posY="63.4"/>
+    <LoctP timestamp="20141030160149" posX="40.6" posY="63.4"/>
+    <LoctP timestamp="20141030160150" posX="42.6" posY="62.4"/>
+    <LoctP timestamp="20141030160152" posX="44.6" posY="60.4"/>
+    <LoctP timestamp="20141030160153" posX="46.6" posY="58.4"/>
+    <LoctP timestamp="20141030160155" posX="47.6" posY="57.4"/>
+    <LoctP timestamp="20141030160156" posX="48.6" posY="57.4"/>
+    <LoctP timestamp="20141030160157" posX="51.6" posY="56.4"/>
+    <LoctP timestamp="20141030160159" posX="55.6" posY="56.4"/>
+    <LoctP timestamp="20141030160200" posX="57.6" posY="55.4"/>
+    <LoctP timestamp="20141030160202" posX="62.6" posY="55.4"/>
+    <LoctP timestamp="20141030160205" posX="64.6" posY="54.4"/>
+    <LoctP timestamp="20141030160206" posX="64.6" posY="55.4"/>
+    <LoctP timestamp="20141030160207" posX="66.6" posY="55.4"/>
+    <LoctP timestamp="20141030160209" posX="69.6" posY="55.4"/>
+    <LoctP timestamp="20141030160211" posX="69.6" posY="56.4"/>
+    <LoctP timestamp="20141030160212" posX="70.6" posY="57.4"/>
+    <LoctP timestamp="20141030160214" posX="72.6" posY="55.4"/>
+    <LoctP timestamp="20141030160215" posX="72.6" posY="55.4"/>
+    <LoctP timestamp="20141030160216" posX="72.6" posY="58.4"/>
+    <LoctP timestamp="20141030160218" posX="71.6" posY="61.4"/>
+    <LoctP timestamp="20141030160219" posX="72.6" posY="63.4"/>
+    <LoctP timestamp="20141030160221" posX="72.6" posY="64.4"/>
+    <LoctP timestamp="20141030160222" posX="72.6" posY="64.4"/>
+  </LocationPoints>
+  <RealPoints id="1">
+    <RealP timestamp="20141030160144" posX="38.668236" posY="67.966"/>
+    <RealP timestamp="20141030160223" posX="66.38579" posY="67.46568"/>
+  </RealPoints>
+</recode>

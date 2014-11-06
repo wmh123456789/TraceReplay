@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="GB2312"?><recode bid="10100120" floorID="101001200005" startTime="20141031145745" endTime="20141031145819">
+  <LocationPoints>
+    <LoctP timestamp="20141031145745" posX="67.3" posY="26.8"/>
+    <LoctP timestamp="20141031145747" posX="70.3" posY="26.8"/>
+    <LoctP timestamp="20141031145748" posX="71.3" posY="25.8"/>
+    <LoctP timestamp="20141031145749" posX="73.3" posY="26.8"/>
+    <LoctP timestamp="20141031145751" posX="73.3" posY="26.8"/>
+    <LoctP timestamp="20141031145752" posX="72.3" posY="28.8"/>
+    <LoctP timestamp="20141031145753" posX="77.3" posY="36.8"/>
+    <LoctP timestamp="20141031145755" posX="84.3" posY="45.8"/>
+    <LoctP timestamp="20141031145756" posX="84.3" posY="46.8"/>
+    <LoctP timestamp="20141031145757" posX="83.3" posY="45.8"/>
+    <LoctP timestamp="20141031145758" posX="82.3" posY="44.8"/>
+    <LoctP timestamp="20141031145800" posX="82.3" posY="44.8"/>
+    <LoctP timestamp="20141031145801" posX="81.3" posY="43.8"/>
+    <LoctP timestamp="20141031145802" posX="79.3" posY="39.8"/>
+    <LoctP timestamp="20141031145804" posX="77.3" posY="34.8"/>
+    <LoctP timestamp="20141031145805" posX="75.3" posY="32.8"/>
+    <LoctP timestamp="20141031145807" posX="75.3" posY="32.8"/>
+    <LoctP timestamp="20141031145808" posX="77.3" posY="33.8"/>
+    <LoctP timestamp="20141031145809" posX="77.3" posY="35.8"/>
+    <LoctP timestamp="20141031145810" posX="78.3" posY="39.8"/>
+    <LoctP timestamp="20141031145812" posX="80.3" posY="42.8"/>
+    <LoctP timestamp="20141031145813" posX="79.3" posY="42.8"/>
+    <LoctP timestamp="20141031145814" posX="78.3" posY="38.8"/>
+    <LoctP timestamp="20141031145816" posX="75.3" posY="35.8"/>
+    <LoctP timestamp="20141031145817" posX="75.3" posY="34.8"/>
+    <LoctP timestamp="20141031145818" posX="77.3" posY="36.8"/>
+  </LocationPoints>
+  <RealPoints id="10">
+    <RealP timestamp="20141031145745" posX="87.71837" posY="49.1661"/>
+    <RealP timestamp="20141031145819" posX="75.84937" posY="34.500877"/>
+  </RealPoints>
+</recode>

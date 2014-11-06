@@ -102,8 +102,8 @@ class Controler(DisplayFrame):
 										variable=self.var_modeLine,
 										indicatoron = 0)
 		self.cb_modeLine.pack(side=LEFT)
-		self.btn_reload = Button(self.f_TrcOpt,text='Reload',command = Caller.OnReloadTrace)
-		self.btn_reload.pack(side=RIGHT)
+		self.btn_clear = Button(self.f_TrcOpt,text='Clear',command = Caller.OnClearTrace)
+		self.btn_clear.pack(side=RIGHT)
 
 	def initMap(self,Caller):
 		self.lb_parampath = Label(self.f_param,text='Param',font = 'Helvetica -12 bold')
@@ -237,6 +237,7 @@ class GUITop(object):
 						'K':float(text[6]),
 						'sizeTxt':text[2]+'x'+text[3]}
 			params.update({param['FlrName']:param})
+			print param['FlrName']
 		return params
 
 	def CheckTraceLength(self,TraceList):
@@ -304,6 +305,11 @@ class GUITop(object):
 		else:
 			print 'Error:Cannot find the log file:',logpath
 			return 'C:/'
+
+
+	def OnClearTrace(self,ev=None):
+		self.Show.C.delete('trace')
+		pass
 	
 	def SavePathLog(self,log,logpath):
 		fp=open(logpath,'w')
@@ -338,6 +344,7 @@ class GUITop(object):
 			self.Con.tx_parampath.delete(1.0, END)
 			self.Con.tx_parampath.insert(1.0, self.MapParamPath.split('/')[-1])
 			self.SavePathLog(self.MapParamPath,'MapParamPath.log')
+			self.MapParam = self.ParseMapParam(self.MapParamPath)
 
 	def OnLoadMap(self,ev=None):
 		# Load map
@@ -381,14 +388,15 @@ class GUITop(object):
 			if self.Con.var_modePtTrace.get() == 1:
 				self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
 							fill=self.Show.recStyle[trace.tag][0], 
-							outline=self.Show.recStyle[trace.tag][1])
+							outline=self.Show.recStyle[trace.tag][1],
+							tags='trace')
 			# if '2' in self.TraceMode:    # Lines mode
 			if self.Con.var_modeLine.get() == 1:
 				if time > trace.starttime:
 					#ToDo: Draw a line 
 					self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time),
 							fill=self.Show.recStyle[trace.tag][0],
-							width = 2.5)
+							width = 2.5,tags='trace')
 					pass
 			if '3' in  self.TraceMode:    # Tag on trace
 				#TODO: add a tag on the current point

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="GB2312"?><recode bid="10100120" floorID="101001200003" startTime="20141031150547" endTime="20141031150624">
+  <LocationPoints>
+    <LoctP timestamp="20141031150548" posX="119.3" posY="30.2"/>
+    <LoctP timestamp="20141031150550" posX="120.3" posY="32.2"/>
+    <LoctP timestamp="20141031150551" posX="119.3" posY="31.2"/>
+    <LoctP timestamp="20141031150552" posX="117.3" posY="29.2"/>
+    <LoctP timestamp="20141031150554" posX="114.3" posY="27.2"/>
+    <LoctP timestamp="20141031150555" posX="116.3" posY="28.2"/>
+    <LoctP timestamp="20141031150556" posX="120.3" posY="34.2"/>
+    <LoctP timestamp="20141031150558" posX="119.3" posY="37.2"/>
+    <LoctP timestamp="20141031150559" posX="115.3" posY="37.2"/>
+    <LoctP timestamp="20141031150600" posX="110.3" posY="40.2"/>
+    <LoctP timestamp="20141031150601" posX="109.3" posY="39.2"/>
+    <LoctP timestamp="20141031150603" posX="109.3" posY="37.2"/>
+    <LoctP timestamp="20141031150604" posX="107.3" posY="36.2"/>
+    <LoctP timestamp="20141031150606" posX="106.3" posY="37.2"/>
+    <LoctP timestamp="20141031150607" posX="109.3" posY="38.2"/>
+    <LoctP timestamp="20141031150608" posX="109.3" posY="37.2"/>
+    <LoctP timestamp="20141031150609" posX="109.3" posY="37.2"/>
+    <LoctP timestamp="20141031150611" posX="109.3" posY="36.2"/>
+    <LoctP timestamp="20141031150612" posX="108.3" posY="35.2"/>
+    <LoctP timestamp="20141031150614" posX="108.3" posY="35.2"/>
+    <LoctP timestamp="20141031150615" posX="108.3" posY="35.2"/>
+    <LoctP timestamp="20141031150616" posX="111.3" posY="38.2"/>
+    <LoctP timestamp="20141031150617" posX="114.3" posY="37.2"/>
+    <LoctP timestamp="20141031150619" posX="113.3" posY="34.2"/>
+    <LoctP timestamp="20141031150620" posX="110.3" posY="33.2"/>
+    <LoctP timestamp="20141031150621" posX="108.3" posY="34.2"/>
+    <LoctP timestamp="20141031150622" posX="105.3" posY="35.2"/>
+    <LoctP timestamp="20141031150624" posX="105.3" posY="35.2"/>
+  </LocationPoints>
+  <RealPoints id="8">
+    <RealP timestamp="20141031150547" posX="132.78209" posY="33.65704"/>
+    <RealP timestamp="20141031150624" posX="116.070786" posY="27.493397"/>
+  </RealPoints>
+</recode>
