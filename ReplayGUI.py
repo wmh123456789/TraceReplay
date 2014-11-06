@@ -7,12 +7,11 @@ class DisplayFrame(object):
 	"""docstring for DisplayFrame"""
 	def __init__(self,size,title=''):
 		super(DisplayFrame, self).__init__()
-		self.top = Tk()
+		self.top = Toplevel()
 		self.top.geometry(size)
 		self.top.title(title)
 		self.TraceList = []
 		print 'DisplayFrame is loaded'
-
 
 	def AddTrace(self,trace):
 		self.TraceList.append(trace)
@@ -21,6 +20,7 @@ class DisplayFrame(object):
 
 	def ClearAllTrace(self):
 		#ToDo: Renew all traces 
+		self.TraceList = []
 		pass
 	
 class Controler(DisplayFrame):
@@ -53,14 +53,15 @@ class Controler(DisplayFrame):
 		self.f_TrcOpt = Frame(self.top)
 		self.f_bar = Frame(self.top)
 		self.f_bottom = Frame(self.top)
+		self.f_param = Frame(self.top)
 		self.f_map = Frame(self.top)
 		# Pack Frames
 		self.f_CanOpt.pack(side=TOP,expand=1,fill=X)
-		self.f_TrcOpt.pack(side=TOP,expand=1,fill=X)
+		self.f_param.pack(side=TOP,expand=1,fill=X)
 		self.f_map.pack(side=TOP,expand=1,fill=X)
+		self.f_TrcOpt.pack(side=TOP,expand=1,fill=X)
 		self.f_bar.pack(side=TOP,expand=1,fill=X)
 		self.f_bottom.pack(side=BOTTOM,expand=1,fill=X)
-
 
 	def initCanvas(self,Caller):
 		self.label1 = Label(self.f_CanOpt,text='SftX',font = 'Helvetica -12 bold')
@@ -81,24 +82,41 @@ class Controler(DisplayFrame):
 	def initTraceOpt(self,Caller):
 		self.lb_tracepath = Label(self.f_TrcOpt,text='TracePath',font = 'Helvetica -12 bold')
 		self.lb_tracepath.pack(side=LEFT)
-		self.tx_tracepath = Text(self.f_TrcOpt,height=1,width=22)
+		self.tx_tracepath = Text(self.f_TrcOpt,height=1,width=32)
 		self.tx_tracepath.pack(side=LEFT)
-		self.lb_opt = Label(self.f_TrcOpt,text='TraceMode',font = 'Helvetica -12 bold')
+		self.btn_loadtrace = Button(self.f_TrcOpt,text='Dir',command = Caller.OnLoadTrace)
+		self.btn_loadtrace.pack(side=LEFT)
+		self.btn_loadtraceF = Button(self.f_TrcOpt,text='File',command = Caller.OnLoadTraceFile)
+		self.btn_loadtraceF.pack(side=LEFT)
+		self.lb_opt = Label(self.f_TrcOpt,text='    DrawMode',font = 'Helvetica -12 bold')
 		self.lb_opt.pack(side=LEFT)
-		self.tx_opt = Text(self.f_TrcOpt,height=1,width=2)
-		self.tx_opt.pack(side=LEFT)
+		# self.tx_opt = Text(self.f_TrcOpt,height=1,width=3)
+		# self.tx_opt.pack(side=LEFT)
+		self.var_modePtTrace = IntVar()
+		self.cb_modePtTrace = Checkbutton(self.f_TrcOpt,text='Trace',
+										variable=self.var_modePtTrace,
+										indicatoron = 0)
+		self.cb_modePtTrace.pack(side=LEFT)
+		self.var_modeLine = IntVar()
+		self.cb_modeLine = Checkbutton(self.f_TrcOpt,text='Line',
+										variable=self.var_modeLine,
+										indicatoron = 0)
+		self.cb_modeLine.pack(side=LEFT)
 		self.btn_reload = Button(self.f_TrcOpt,text='Reload',command = Caller.OnReloadTrace)
 		self.btn_reload.pack(side=RIGHT)
 
 	def initMap(self,Caller):
-		self.lb_mappath = Label(self.f_map,text='MapPath',font = 'Helvetica -12 bold')
+		self.lb_parampath = Label(self.f_param,text='Param',font = 'Helvetica -12 bold')
+		self.lb_parampath.pack(side=LEFT)
+		self.tx_parampath = Text(self.f_param,height=1)
+		self.tx_parampath.pack(side=LEFT,fill=X)
+		self.btn_openmpr = Button(self.f_param,text='Open',command = Caller.OnOpenMapParamPath)
+		self.btn_openmpr.pack(side=RIGHT)
+
+		self.lb_mappath = Label(self.f_map,text='FloorMap',font = 'Helvetica -12 bold')
 		self.lb_mappath.pack(side=LEFT)
-		self.tx_mappath = Text(self.f_map,height=1,width=22)
-		self.tx_mappath.pack(side=LEFT)
-		self.btn_openmpr = Button(self.f_map,text='...',command = Caller.OnOpenMapParamPath)
-		self.btn_openmpr.pack(side=LEFT)
-		self.lb_floorid = Label(self.f_map,text='Floor',font = 'Helvetica -12 bold')
-		self.lb_floorid.pack(side=LEFT)
+		self.tx_mappath = Text(self.f_map,height=1)
+		self.tx_mappath.pack(side=LEFT,fill=X)
 		self.btn_loadmap = Button(self.f_map,text='Load',command = Caller.OnLoadMap)
 		self.btn_loadmap.pack(side=RIGHT)
 
@@ -138,7 +156,7 @@ class ShowPath(DisplayFrame):
 						width= self.width,
 						height= self.height,
 						bg='white')
-		self.Loadmap(Caller.MapPath)
+		# self.Loadmap(Caller.MapPath)
 		self.recW = 15
 		self.recH = 15
 		self.recDict = {}
@@ -152,15 +170,16 @@ class ShowPath(DisplayFrame):
 		super(ShowPath,self).AddTrace(trace)
 		rec = self.C.create_rectangle(0, 0, self.recW, self.recH, 
 						fill=self.recStyle[trace.tag][0], 
-						outline=self.recStyle[trace.tag][1])
+						outline=self.recStyle[trace.tag][1],
+						tags=(trace.tag,'rec'))
 		self.recDict.update({trace:rec})
 
 
 	def Loadmap(self,mappath):
 		image = Image.open(mappath) 
 		self.map = ImageTk.PhotoImage(image) 
-		# print dir(self.C)
-		self.C.create_image(self.width/2,self.height/2,image=self.map)
+		print self.map
+		self.C.create_image(self.width/2,self.height/2,image=self.map,tags='map')
 
 class GUITop(object):
 	"""docstring for GUITop"""
@@ -169,31 +188,33 @@ class GUITop(object):
 		self.LTrace = LTrace
 		self.RTrace = RTrace
 		self.TracePath = TracePath
+		self.TraceMode = '0'  # 0=Default, 1=PointTrace, 2=Line, 3=TagOn
+		self.recH = 15
+		self.recW = 15
 		self.MapParamPath = MapParamPath
 		self.MapParam = self.ParseMapParam(self.MapParamPath)
 		self.FitTwoTraces(self.LTrace,self.RTrace)
 		self.MapPath = 'TongFangD19_Floor_F19.png'
 		self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
 
-		self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt'],'Location Trace',Caller=self)
-		self.Con = Controler('450x180','Control Panel',Caller=self)		
+		self.Con = Controler('750x280+0+0','Control Panel',Caller=self)
+		# self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt'],'Location Trace',Caller=self)
+		# self.Show.Loadmap(self.MapPath)
 		
 		# Add traces
 		self.Con.AddTrace(self.LTrace)
 		self.Con.AddTrace(self.RTrace)
-		self.Show.AddTrace(self.LTrace)
-		self.Show.AddTrace(self.RTrace)
+		# self.Show.AddTrace(self.LTrace)
+		# self.Show.AddTrace(self.RTrace)
 	
 		# Data analysis
 		self.TotalErr = 0.0
 		self.TotalPts = 0
 		self.AvgErr = 0.0
 
-
 		# Start windows
-		self.Show.top.mainloop()
+		# self.Show.top.mainloop()
 		self.Con.top.mainloop()
-
 
 	'''
 	Parse the mpa params from .params file:
@@ -217,7 +238,6 @@ class GUITop(object):
 						'sizeTxt':text[2]+'x'+text[3]}
 			params.update({param['FlrName']:param})
 		return params
-
 
 	def CheckTraceLength(self,TraceList):
 		if len(TraceList)>1:
@@ -261,6 +281,7 @@ class GUITop(object):
 		self.FitTwoTraces(self.LTrace,self.RTrace)
 		self.Con.ClearAllTrace()
 		self.Show.ClearAllTrace()
+		self.Show.C.delete('rec')
 		self.Con.AddTrace(self.LTrace)
 		self.Con.AddTrace(self.RTrace)
 		self.Show.AddTrace(self.LTrace)
@@ -271,41 +292,82 @@ class GUITop(object):
 
 		pass
 
-
 	def LoadPathLog(self,logpath):
 		if os.path.isfile(logpath):
-			return open(logpath).read()
+			fp = open(logpath)
+			log = fp.read()
+			fp.close()
+			if os.path.isfile(log):
+				return os.path.split(log)[0]
+			else:
+				return log
 		else:
 			print 'Error:Cannot find the log file:',logpath
 			return 'C:/'
+	
 	def SavePathLog(self,log,logpath):
 		fp=open(logpath,'w')
 		fp.write(log)
 		fp.close()
 
+	def OnLoadTrace(self,ev=None):
+		initdir = self.LoadPathLog('TracePath.log')
+		path = tkFileDialog.askdirectory(initialdir = initdir)
+		if path != '':
+			self.TracePath = path
+			self.Con.tx_tracepath.delete(1.0, END)
+			self.Con.tx_tracepath.insert(1.0, self.TracePath.split('/')[-1])
+			self.SavePathLog(self.TracePath,'TracePath.log')
+			self.OnReloadTrace()
+
+	def OnLoadTraceFile(self,ev=None):
+		initdir = self.LoadPathLog('TracePath.log')
+		path = tkFileDialog.askopenfilename(initialdir = initdir)
+		if path != '':
+			self.TracePath = path
+			self.Con.tx_tracepath.delete(1.0, END)
+			self.Con.tx_tracepath.insert(1.0, self.TracePath.split('/')[-1])
+			self.SavePathLog(self.TracePath,'TracePath.log')
+			self.OnReloadTrace()
+
 	def OnOpenMapParamPath(self,ev=None):
 		initdir = self.LoadPathLog('MapParamPath.log')
-		self.MapParamPath = tkFileDialog.askopenfilename(initialdir = initdir)
-		self.SavePathLog(self.MapParamPath,'MapParamPath.log')
+		path = tkFileDialog.askopenfilename(initialdir = initdir)
+		if path != '':
+			self.MapParamPath = path
+			self.Con.tx_parampath.delete(1.0, END)
+			self.Con.tx_parampath.insert(1.0, self.MapParamPath.split('/')[-1])
+			self.SavePathLog(self.MapParamPath,'MapParamPath.log')
 
 	def OnLoadMap(self,ev=None):
-		# Load map params
-		
-		# Load floor list
-		
+		# Load map
+		initdir = self.LoadPathLog('MapPath.log')
+		path = tkFileDialog.askopenfilename(initialdir = initdir)
+		if path != '':
+			self.MapPath = path
+			self.Con.tx_mappath.delete(1.0, END)
+			self.Con.tx_mappath.insert(1.0, self.MapPath.split('/')[-1])
+			self.SavePathLog(self.MapPath,'MapPath.log')
+			self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
+
+			self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt']+'+800+100','Location Trace',Caller=self)
+			self.Show.AddTrace(self.LTrace)
+			self.Show.AddTrace(self.RTrace)
+			self.Show.Loadmap(self.MapPath)
+			self.Show.C.pack()
+			self.Show.top.mainloop()
 		pass
 
 	def OnConfirm(self,ev=None):
 		self.Show.SftX = float(self.Con.text1.get(1.0,END))
 		self.Show.SftY = float(self.Con.text2.get(1.0,END))
 		self.Show.Scale = float(self.Con.text3.get(1.0,END))
-
 		pass
 
 	def OnProgBarMove(self,ev=None):
 		# print self.Con.ProgBar.get()
-		W = self.Show.recW
-		H = self.Show.recH
+		W = self.recW
+		H = self.recH
 
 		for trace in self.Show.TraceList:
 			time = trace.starttime + self.Con.ProgBar.get()
@@ -315,18 +377,20 @@ class GUITop(object):
 			self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
 			# Keep a trace on map 
-			if '1' in self.Con.tx_opt.get(1.0,END):     # Points mode
+			# if '1' in self.TraceMode:     # Points-Trace mode
+			if self.Con.var_modePtTrace.get() == 1:
 				self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
 							fill=self.Show.recStyle[trace.tag][0], 
 							outline=self.Show.recStyle[trace.tag][1])
-			if '2' in self.Con.tx_opt.get(1.0,END):    # Lines mode
+			# if '2' in self.TraceMode:    # Lines mode
+			if self.Con.var_modeLine.get() == 1:
 				if time > trace.starttime:
 					#ToDo: Draw a line 
 					self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time),
 							fill=self.Show.recStyle[trace.tag][0],
 							width = 2.5)
 					pass
-			if '3' in  self.Con.tx_opt.get(1.0,END):    # Tag on trace
+			if '3' in  self.TraceMode:    # Tag on trace
 				#TODO: add a tag on the current point
 				pass
 

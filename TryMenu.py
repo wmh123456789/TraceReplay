@@ -36,7 +36,10 @@ import tkFileDialog
 import os
  
 filename = tkFileDialog.askopenfilename(initialdir = 'E:/Python')
-print filename
+if filename == '':
+	print 'Canceled'
+else:
+	print filename
 
 # path = 'D:\\Path0.txt '
 # def LoadPathLog(logpath):

@@ -1,27 +1,23 @@
 # -*- coding:utf-8 -*-
-# import time 
-# import Tkinter 
-# from PIL import Image, ImageTk
+import time 
+import Tkinter 
+from PIL import Image, ImageTk
 
-# print time.time()
-# print time.localtime(1414051329393/100.0)
+from Tkinter import *
 
+master = Tk()
 
-# D = {1:'a',2:'b',3:'c'}
-# D.pop(2)
+var = IntVar()
+def OnCheck(var,ev=None):
+	print 'Checked!!',var.get()
+c = Checkbutton(master, text="Expand", variable=var, indicatoron = 0,
+	command=lambda:OnCheck(var))
+c.pack()
 
-# A = lambda x,y:x+y
-# print A(1,2)
-
-
-# image = Image.open("pikachou.jpg")
-# print image
-# photo = ImageTk.PhotoImage(file="pikachou.jpg")
-
-
-
-# root = Tkinter.Tk()
-# root2 = Tkinter.Tk()
+mainloop()
+# root0 = Tkinter.Tk()
+# root2 = Tkinter.Toplevel(root0)
+# root = Tkinter.Toplevel(root0)
 # image = Image.open("pikachou.jpg")
 # im = ImageTk.PhotoImage(image)
 # canvas = Tkinter.Canvas(root,
