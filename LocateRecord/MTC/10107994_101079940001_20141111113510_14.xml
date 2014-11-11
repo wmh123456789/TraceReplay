@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="GB2312"?><recode bid="10107994" floorID="101079940001" startTime="20141111113509" endTime="20141111113510">
+  <LocationPoints>
+    <LoctP timestamp="20141111113509" posX="58.3" posY="-10.9"/>
+  </LocationPoints>
+  <RealPoints id="14">
+    <RealP timestamp="20141111113509" posX="59.330246" posY="-14.342869"/>
+    <RealP timestamp="20141111113510" posX="59.330246" posY="-14.342869"/>
+  </RealPoints>
+</recode>
