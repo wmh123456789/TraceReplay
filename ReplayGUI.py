@@ -355,8 +355,9 @@ class GUITop(object):
 			self.Con.tx_mappath.delete(1.0, END)
 			self.Con.tx_mappath.insert(1.0, self.MapPath.split('/')[-1])
 			self.SavePathLog(self.MapPath,'MapPath.log')
-			self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
-
+			# self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
+			self.CurrFlr = self.MapPath.split('.')[1][5:]
+			print self.MapPath
 			self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt']+'+800+100','Location Trace',Caller=self)
 			self.Show.AddTrace(self.LTrace)
 			self.Show.AddTrace(self.RTrace)

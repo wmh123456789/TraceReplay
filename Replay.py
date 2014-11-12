@@ -226,9 +226,10 @@ class XMLFile(object):
 		FileText = ''
 		FileLines = []
 		for xml in os.listdir(xmldir):
-			xmlfile = os.path.join(xmldir,xml)
-			FileLines += open(xmlfile,'r').readlines()
-			pass
+			if not os.path.isdir(os.path.join(xmldir,xml)):
+				xmlfile = os.path.join(xmldir,xml)
+				FileLines += open(xmlfile,'r').readlines()
+				pass
 		FileText = ' '.join(FileLines)
 		return BeautifulSoup(FileText.decode('GB2312').encode('utf8'))
 

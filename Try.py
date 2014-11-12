@@ -5,17 +5,24 @@ from PIL import Image, ImageTk
 
 from Tkinter import *
 
-master = Tk()
+# master = Tk()
 
-var = IntVar()
-def OnCheck(var,ev=None):
-	print 'Checked!!',var.get()
-c = Checkbutton(master, text="Expand", variable=var, indicatoron = 0,
-	command=lambda:OnCheck(var))
-c.pack()
+# var = IntVar()
+# def OnCheck(var,ev=None):
+# 	print 'Checked!!',var.get()
+# c = Checkbutton(master, text="Expand", variable=var, indicatoron = 0,
+# 	command=lambda:OnCheck(var))
+# c.pack()
 
-mainloop()
-# root0 = Tkinter.Tk()
+# mainloop()
+# # root0 = Tkinter.Tk()
+
+
+a = 'MSRA.Floor2F.png'
+print a.split('.')[1][5:]
+
+
+
 # root2 = Tkinter.Toplevel(root0)
 # root = Tkinter.Toplevel(root0)
 # image = Image.open("pikachou.jpg")
