@@ -224,20 +224,21 @@ class GUITop(object):
 		py = -ly*K+(H-Y)
 	'''
 	def ParseMapParam(self,ParamFile):
-		lines = open(ParamFile).readlines()
 		params = {}
-		for line in lines:
-			text = line.split('\t')
-			param = {'BldName':text[0],
-						'FlrName':text[1],
-						'W':int(text[2]),
-						'H':int(text[3]),
-						'X':int(text[4]),
-						'Y':int(text[5]),
-						'K':float(text[6]),
-						'sizeTxt':text[2]+'x'+text[3]}
-			params.update({param['FlrName']:param})
-			print param['FlrName']
+		if not ParamFile == '':
+			lines = open(ParamFile).readlines()
+			for line in lines:
+				text = line.split('\t')
+				param = {'BldName':text[0],
+							'FlrName':text[1],
+							'W':int(text[2]),
+							'H':int(text[3]),
+							'X':int(text[4]),
+							'Y':int(text[5]),
+							'K':float(text[6]),
+							'sizeTxt':text[2]+'x'+text[3]}
+				params.update({param['FlrName']:param})
+				print param['FlrName']
 		return params
 
 	def CheckTraceLength(self,TraceList):
@@ -422,7 +423,7 @@ class GUITop(object):
 def main():
 	
 	# rootpath = '.\TFRecord\RawFiles\Test2'
-	rootpath = r'E:\= Workspaces\Git\TraceReplay\LocateRecord\test.xml'
+	rootpath = r'.\LocateRecord\test.xml'
 	MallName = 'TongFangD19'
 	ParamFile = r'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK\\'+MallName+r'\Binary\\'+MallName+r'.binary.params'
 
@@ -440,7 +441,7 @@ def main():
 	# print LTrace.trace[LTrace.starttime].getTimeStamp()
 	
 	
-	G = GUITop(LTrace,RTrace,ParamFile)
+	G = GUITop(LTrace,RTrace)
 	
 
 if __name__ == "__main__":
