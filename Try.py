@@ -21,6 +21,13 @@ from Tkinter import *
 a = 'MSRA.Floor2F.png'
 print a.split('.')[1][5:]
 
+MallName = 'SohuWangLuoDaSha'
+RootDir = 'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK'
+mxdfile = '{0}\{1}\{1}.mxd'.format(RootDir,MallName)
+xmlfile = '{0}\{1}\Binary\{1}.Floor2F.xml'.format(RootDir,MallName)
+
+print mxdfile, xmlfile
+
 
 
 # root2 = Tkinter.Toplevel(root0)
