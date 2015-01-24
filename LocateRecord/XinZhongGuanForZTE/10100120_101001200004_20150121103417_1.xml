@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="GB2312"?><recode bid="10100120" floorID="101001200004" startTime="20150121103335" endTime="20150121103417">
+  <LocationPoints>
+    <LoctP timestamp="20150121103337" posX="135.0" posY="37.9"/>
+    <LoctP timestamp="20150121103338" posX="137.0" posY="38.9"/>
+    <LoctP timestamp="20150121103340" posX="139.0" posY="38.9"/>
+    <LoctP timestamp="20150121103341" posX="139.0" posY="39.9"/>
+    <LoctP timestamp="20150121103343" posX="139.0" posY="38.9"/>
+    <LoctP timestamp="20150121103344" posX="138.0" posY="38.9"/>
+    <LoctP timestamp="20150121103346" posX="138.0" posY="37.9"/>
+    <LoctP timestamp="20150121103349" posX="123.0" posY="39.9"/>
+    <LoctP timestamp="20150121103354" posX="139.0" posY="40.9"/>
+    <LoctP timestamp="20150121103354" posX="134.0" posY="37.9"/>
+    <LoctP timestamp="20150121103354" posX="124.0" posY="36.9"/>
+    <LoctP timestamp="20150121103354" posX="121.0" posY="38.9"/>
+    <LoctP timestamp="20150121103356" posX="115.0" posY="37.9"/>
+    <LoctP timestamp="20150121103358" posX="109.0" posY="36.9"/>
+    <LoctP timestamp="20150121103359" posX="108.0" posY="36.9"/>
+    <LoctP timestamp="20150121103401" posX="109.0" posY="36.9"/>
+    <LoctP timestamp="20150121103402" posX="109.0" posY="34.9"/>
+    <LoctP timestamp="20150121103404" posX="108.0" posY="33.9"/>
+    <LoctP timestamp="20150121103406" posX="105.0" posY="33.9"/>
+    <LoctP timestamp="20150121103407" posX="105.0" posY="32.9"/>
+    <LoctP timestamp="20150121103408" posX="103.0" posY="32.9"/>
+    <LoctP timestamp="20150121103410" posX="102.0" posY="33.9"/>
+    <LoctP timestamp="20150121103411" posX="100.0" posY="33.9"/>
+    <LoctP timestamp="20150121103413" posX="99.0" posY="32.9"/>
+    <LoctP timestamp="20150121103415" posX="100.0" posY="33.9"/>
+    <LoctP timestamp="20150121103417" posX="99.0" posY="33.9"/>
+  </LocationPoints>
+  <RealPoints id="1">
+    <RealP timestamp="20150121103335" posX="138.38931" posY="37.52913"/>
+    <RealP timestamp="20150121103417" posX="91.35727" posY="26.908127"/>
+  </RealPoints>
+</recode>
