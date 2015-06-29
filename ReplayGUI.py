@@ -388,6 +388,10 @@ class GUITop(object):
 			rec = self.Show.recDict[trace]
 			self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
+			# for debug
+			print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
+			
+
 			# Keep a trace on map 
 			# if '1' in self.TraceMode:     # Points-Trace mode
 			if self.Con.var_modePtTrace.get() == 1:
