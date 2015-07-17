@@ -240,6 +240,16 @@ class XMLFile(object):
 		# print FileText
 		return BeautifulSoup(FileText.decode('GB2312').encode('utf8'))
 
+
+	def WriteXML(self,filepath=None,soup=None):
+		if soup == None:
+			soup = self.soup
+		if filepath == None:
+			filepath = self.filepath
+		fp = open(filepath,'w')
+		fp.write(str(soup).encode('utf8'))
+		fp.close
+
 	def GetPointInfo(self,soup,PType):
 		soup.prettify()
 		# print str(self.soup)

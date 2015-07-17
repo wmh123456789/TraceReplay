@@ -47,6 +47,7 @@ class TryClass(object):
 		self.C.itemconfig(self.arc,extent=extent)
 		self.C.coords(self.rec,(50+extent, 25, 55+extent, 30))
 
+print dir(Canvas)
 mytry = TryClass()
 
 
