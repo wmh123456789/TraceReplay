@@ -77,7 +77,11 @@ class Controler(DisplayFrame):
 		self.text3 = Text(self.f_CanOpt,height=1,width=9)
 		self.text3.pack(side=LEFT)
 		self.btn_Confirm = Button(self.f_CanOpt,text='Confirm',command = Caller.OnConfirm)
-		self.btn_Confirm.pack(side=RIGHT)
+		self.btn_Confirm.pack(side=LEFT)
+		self.var_Interpolate = IntVar()
+		self.cb_Interpolate = Checkbutton(self.f_CanOpt,text='Interpolate',
+										variable=self.var_Interpolate)
+		self.cb_Interpolate.pack(side=RIGHT)
 
 	def initTraceOpt(self,Caller):
 		self.lb_tracepath = Label(self.f_TrcOpt,text='TracePath',font = 'Helvetica -12 bold')
@@ -296,9 +300,10 @@ class GUITop(object):
 		xml = XMLFile(self.TracePath)
 		self.LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L],tag='L')
 		self.RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R],tag='R')
-		# Interpolate the trace
-		# self.LTrace.LinearInterpolation()
-		# self.RTrace.LinearInterpolation()
+		
+		if self.Con.var_Interpolate.get() == 1 :
+			self.LTrace.LinearInterpolation()
+			self.RTrace.LinearInterpolation()
 
 		self.FitTwoTraces(self.LTrace,self.RTrace)
 		self.Con.ClearAllTrace()
