@@ -32,14 +32,14 @@
 # app=App(root)
 # root.mainloop()
 
-import tkFileDialog
-import os
+# import tkFileDialog
+# import os
  
-filename = tkFileDialog.askopenfilename(initialdir = 'E:/Python')
-if filename == '':
-	print 'Canceled'
-else:
-	print filename
+# filename = tkFileDialog.askopenfilename(initialdir = 'E:/Python')
+# if filename == '':
+# 	print 'Canceled'
+# else:
+# 	print filename
 
 # path = 'D:\\Path0.txt '
 # def LoadPathLog(logpath):
@@ -49,3 +49,10 @@ else:
 # 		print 'Error:Cannot find the log file:',logpath
 
 # print LoadPathLog(path)
+
+
+a = 1
+b = 2
+
+c = max(a,b)
+print c 

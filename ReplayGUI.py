@@ -152,16 +152,31 @@ class ShowPath(DisplayFrame):
 		self.width  = self.MapParam[self.CurrFlr]['W']
 		self.height = self.MapParam[self.CurrFlr]['H']
 
+		self.scrollbarY = Scrollbar(self.top, orient=VERTICAL)
+		self.scrollbarX = Scrollbar(self.top, orient = HORIZONTAL)
+
 		self.C = Canvas(self.top,
-						width= self.width,
-						height= self.height,
+						width= min(1000,self.width),
+						height= min(800,self.height),
+						xscrollcommand = self.scrollbarX.set,
+						yscrollcommand = self.scrollbarY.set,
+						scrollregion = (0,0,self.width,self.height),
 						bg='white')
 		# self.Loadmap(Caller.MapPath)
+		self.scrollbarY.config( command = self.C.yview )
+		self.scrollbarX.config( command = self.C.xview )
+		
+		self.scrollbarY.pack( side = RIGHT, fill=Y)
+		self.scrollbarX.pack( side = BOTTOM, fill=X )
+		
+		self.C.pack(expand=1)
+		
 		self.recW = 15
 		self.recH = 15
 		self.recDict = {}
 		self.recStyle = {'L':['red','green'],'R':['blue','white']}
-		self.C.pack(expand=1)
+
+
 
 
 	#reload
@@ -179,7 +194,8 @@ class ShowPath(DisplayFrame):
 		image = Image.open(mappath) 
 		self.map = ImageTk.PhotoImage(image) 
 		print self.map
-		self.C.create_image(self.width/2,self.height/2,image=self.map,tags='map')
+		# self.C.create_image(self.width/2,self.height/2,image=self.map,tags='map')
+		self.C.create_image(0,0,anchor=NW,image=self.map,tags='map')
 
 class GUITop(object):
 	"""docstring for GUITop"""
@@ -280,8 +296,10 @@ class GUITop(object):
 		xml = XMLFile(self.TracePath)
 		self.LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L],tag='L')
 		self.RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R],tag='R')
-		self.LTrace.LinearInterpolation()
-		self.RTrace.LinearInterpolation()
+		# Interpolate the trace
+		# self.LTrace.LinearInterpolation()
+		# self.RTrace.LinearInterpolation()
+
 		self.FitTwoTraces(self.LTrace,self.RTrace)
 		self.Con.ClearAllTrace()
 		self.Show.ClearAllTrace()
@@ -361,12 +379,13 @@ class GUITop(object):
 			# self.CurrFlr = self.MapPath.split('.')[1][5:]
 			print self.MapPath
 
-			self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt']+'+800+100','Location Trace',Caller=self)
+			self.Show = ShowPath('1000x800+800+100','Location Trace',Caller=self)
+			# self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt']+'+800+100','Location Trace',Caller=self)
 			# self.Show = ShowPath('1920x1080',Caller=self)
 			self.Show.AddTrace(self.LTrace)
 			self.Show.AddTrace(self.RTrace)
 			self.Show.Loadmap(self.MapPath)
-			self.Show.C.pack()
+			self.Show.C.pack(fill=BOTH)
 			self.Show.top.mainloop()
 		pass
 
@@ -437,8 +456,10 @@ def main():
 	xml = XMLFile(rootpath)
 	LTrace = LocTrace([xml.timestamplist_L,xml.Xlist_L,xml.Ylist_L],tag='L')
 	RTrace = LocTrace([xml.timestamplist_R,xml.Xlist_R,xml.Ylist_R],tag='R')
-	LTrace.LinearInterpolation()
-	RTrace.LinearInterpolation()
+	# Interplate polate
+
+	# LTrace.LinearInterpolation()
+	# RTrace.LinearInterpolation()
 	
 	# Print the Raw Trace data
 	# print '\n----===== Real  Path =====----\n'

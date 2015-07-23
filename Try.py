@@ -15,30 +15,30 @@ from Tkinter import *
 # c.pack()
 
 # mainloop()
-# # root0 = Tkinter.Tk()
+root0 = Tkinter.Tk()
 
 
-a = 'MSRA.Floor2F.png'
-print a.split('.')[1][5:]
+# a = 'MSRA.Floor2F.png'
+# print a.split('.')[1][5:]
 
-MallName = 'SohuWangLuoDaSha'
-RootDir = 'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK'
-mxdfile = '{0}\{1}\{1}.mxd'.format(RootDir,MallName)
-xmlfile = '{0}\{1}\Binary\{1}.Floor2F.xml'.format(RootDir,MallName)
+# MallName = 'SohuWangLuoDaSha'
+# RootDir = 'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK'
+# mxdfile = '{0}\{1}\{1}.mxd'.format(RootDir,MallName)
+# xmlfile = '{0}\{1}\Binary\{1}.Floor2F.xml'.format(RootDir,MallName)
 
-print mxdfile, xmlfile
+# print mxdfile, xmlfile
 
 
 
 # root2 = Tkinter.Toplevel(root0)
-# root = Tkinter.Toplevel(root0)
-# image = Image.open("pikachou.jpg")
-# im = ImageTk.PhotoImage(image)
-# canvas = Tkinter.Canvas(root,
-#     # width = 500,      # 指定Canvas组件的宽度
-#     # height = 600,      # 指定Canvas组件的高度
-#     bg = 'white')      # 指定Canvas组件的背景色
-# #im = Tkinter.PhotoImage(file='img.gif')     # 使用PhotoImage打开图片
+root = Tkinter.Toplevel(root0)
+image = Image.open('pikachou.jpg')
+im = ImageTk.PhotoImage(image)
+canvas = Tkinter.Canvas(root,
+    # width = 500,      # 指定Canvas组件的宽度
+    # height = 600,      # 指定Canvas组件的高度
+    bg = 'white')      # 指定Canvas组件的背景色
+#im = Tkinter.PhotoImage(file='img.gif')     # 使用PhotoImage打开图片
 
 
 # canvas.create_image(150,150,image = im)      # 使用create_image将图片添加到Canvas组件中
@@ -82,5 +82,5 @@ print mxdfile, xmlfile
 # #btn1 = Button(f1, text='button1')
 # #btn1.pack(side='left', anchor='nw', padx=3, pady=5)
 
-# root.mainloop()
+root.mainloop()
 

@@ -237,7 +237,7 @@ class XMLFile(object):
 	def ReadXML(self,filepath):
 		FileLines = open(filepath,'r').readlines()
 		FileText = ' '.join(FileLines)
-		# print FileText
+		# print FileText.decode('GB2312').encode('utf8')
 		return BeautifulSoup(FileText.decode('GB2312').encode('utf8'))
 
 
@@ -259,6 +259,10 @@ class XMLFile(object):
 		Ylist = [P['posy'] for P in LoctP]
 		return TimeStampList,Xlist,Ylist
 
+	# If the start time is not correct, replace it with the first timestamp
+	def FixStartTimeErr(self):
+		# if self.soup.recode['starttime'] != self.soup.recode.loacationpoints
+		pass
 
 def main():
 	rootpath = './TFRecord\Test2'
