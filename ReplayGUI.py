@@ -139,9 +139,11 @@ class Controler(DisplayFrame):
 
 
 	def AddTrace(self,trace):
-		super(Controler,self).AddTrace(trace)
-		TraceLen = self.TraceList[0].endtime - self.TraceList[0].starttime
-		self.ProgBar.config(to=TraceLen)
+		if not trace==None:
+			super(Controler,self).AddTrace(trace)
+			TraceLen = self.TraceList[0].endtime - self.TraceList[0].starttime
+			self.ProgBar.config(to=TraceLen)
+		pass
 		
 
 class ShowPath(DisplayFrame):
@@ -203,7 +205,7 @@ class ShowPath(DisplayFrame):
 
 class GUITop(object):
 	"""docstring for GUITop"""
-	def __init__(self,LTrace,RTrace,MapParamPath = '',TracePath=''):
+	def __init__(self,LTrace=None,RTrace=None,MapParamPath = '',TracePath=''):
 		super(GUITop, self).__init__()
 		self.LTrace = LTrace
 		self.RTrace = RTrace
@@ -213,9 +215,12 @@ class GUITop(object):
 		self.recW = 15
 		self.MapParamPath = MapParamPath
 		self.MapParam = self.ParseMapParam(self.MapParamPath)
-		self.FitTwoTraces(self.LTrace,self.RTrace)
-		self.MapPath = 'TongFangD19_Floor_F19.png'
-		self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
+		if not (LTrace == None or RTrace == None): 
+			self.FitTwoTraces(self.LTrace,self.RTrace)
+		self.MapPath = ''
+		self.CurrFlr = ''
+		# self.MapPath = 'TongFangD19_Floor_F19.png'
+		# self.CurrFlr = self.MapPath.split('.')[-2].split('_')[-1]
 
 		self.Con = Controler('750x280+0+0','Control Panel',Caller=self)
 		# self.Show = ShowPath(self.MapParam[self.CurrFlr]['sizeTxt'],'Location Trace',Caller=self)
@@ -472,9 +477,11 @@ def main():
 	# print '\n----===== Locate Path =====----\n'
 	# print str(LTrace)
 	# print LTrace.trace[LTrace.starttime].getTimeStamp()
-	
+	print LTrace
+	print RTrace
 	
 	G = GUITop(LTrace,RTrace)
+	# G = GUITop()
 	
 
 if __name__ == "__main__":
