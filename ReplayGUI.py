@@ -127,6 +127,8 @@ class Controler(DisplayFrame):
 	def initPrograssBar(self,Caller):
 		self.ProgBar = Scale(self.f_bar,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
 		self.ProgBar.pack(fill=X,side=TOP)
+		self.btn_showall = Button(self.f_bar,text='ShowAll',command = Caller.OnShowAll)
+		self.btn_showall.pack(side=RIGHT)
 
 	def initStatus(self,Caller):
 		self.CoordLbl = Label(self.f_bottom,text='xl=0, yl=0; xr=0, yr=0',font = 'Helvetica -12 bold')
@@ -405,40 +407,72 @@ class GUITop(object):
 		self.Show.Scale = float(self.Con.text3.get(1.0,END))
 		pass
 
-	def OnProgBarMove(self,ev=None):
-		# print self.Con.ProgBar.get()
+	def DrawTrace(self,trace,time):
 		W = self.recW
 		H = self.recH
+		PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
+		PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
+		rec = self.Show.recDict[trace]
+		self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
+
+		# for debug
+		print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
+		
+
+		# Keep a trace on map 
+		# if '1' in self.TraceMode:     # Points-Trace mode
+		if self.Con.var_modePtTrace.get() == 1:
+			self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
+						fill=self.Show.recStyle[trace.tag][0], 
+						outline=self.Show.recStyle[trace.tag][1],
+						tags='trace')
+		# if '2' in self.TraceMode:    # Lines mode
+		if self.Con.var_modeLine.get() == 1:
+			if time > trace.starttime:
+				#ToDo: Draw a line 
+				self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time),
+						fill=self.Show.recStyle[trace.tag][0],
+						width = 2.5,tags='trace')
+				pass
+		if '3' in  self.TraceMode:    # Tag on trace
+			#TODO: add a tag on the current point
+			pass
+
+	def OnProgBarMove(self,ev=None):
+		# print self.Con.ProgBar.get()
+		# W = self.recW
+		# H = self.recH
 
 		for trace in self.Show.TraceList:
 			time = trace.starttime + self.Con.ProgBar.get()
-			PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
-			PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
-			rec = self.Show.recDict[trace]
-			self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
+			self.DrawTrace(trace,time)
+			# PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
+			# PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
+			# rec = self.Show.recDict[trace]
+			# self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
-			# for debug
-			print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
+			# # for debug
+			# print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
 			
 
-			# Keep a trace on map 
-			# if '1' in self.TraceMode:     # Points-Trace mode
-			if self.Con.var_modePtTrace.get() == 1:
-				self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
-							fill=self.Show.recStyle[trace.tag][0], 
-							outline=self.Show.recStyle[trace.tag][1],
-							tags='trace')
-			# if '2' in self.TraceMode:    # Lines mode
-			if self.Con.var_modeLine.get() == 1:
-				if time > trace.starttime:
-					#ToDo: Draw a line 
-					self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time),
-							fill=self.Show.recStyle[trace.tag][0],
-							width = 2.5,tags='trace')
-					pass
-			if '3' in  self.TraceMode:    # Tag on trace
-				#TODO: add a tag on the current point
-				pass
+			# # Keep a trace on map 
+			# # if '1' in self.TraceMode:     # Points-Trace mode
+			# if self.Con.var_modePtTrace.get() == 1:
+			# 	self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
+			# 				fill=self.Show.recStyle[trace.tag][0], 
+			# 				outline=self.Show.recStyle[trace.tag][1],
+			# 				tags='trace')
+			# # if '2' in self.TraceMode:    # Lines mode
+			# if self.Con.var_modeLine.get() == 1:
+			# 	if time > trace.starttime:
+			# 		#ToDo: Draw a line 
+			# 		self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time),
+			# 				fill=self.Show.recStyle[trace.tag][0],
+			# 				width = 2.5,tags='trace')
+			# 		pass
+			# if '3' in  self.TraceMode:    # Tag on trace
+			# 	#TODO: add a tag on the current point
+			# 	pass
 
 		# Error Calculation
 		ErrorDist = self.CalcDist(float(self.Show.TraceList[0].trace[time].x),
@@ -451,6 +485,15 @@ class GUITop(object):
 		self.Con.CoordLbl.config(text = 'ErrorDst=%.2f; AvgErr=%.3f'%(ErrorDist,self.AvgErr))
 
 		return self.Con.ProgBar.get()
+		pass
+
+
+	def OnShowAll(self,ev=None):
+		for trace in self.Show.TraceList:
+			print trace.starttime,trace.endtime,len(trace.trace)
+			for time in xrange(trace.starttime,trace.endtime):
+				# self.DrawTrace(trace,time)
+				pass
 		pass
 
 	def CalcDist(self,x1,y1,x2,y2):

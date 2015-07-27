@@ -28,7 +28,7 @@ def ExportPNG(FloorList,MallName,RootDir):
 		for i,df in enumerate(arcpy.mapping.ListDataFrames(mxd)):
 			# print i
 
-			MarginFactor = 1.5  # Modify the margin of the output PNG,-1~2 for different bld
+			MarginFactor = -1.0 # Modify the margin of the output PNG,-1~2 for different bld
 			SetExtent(df,xmin-10*MarginFactor,xmax+10*MarginFactor,
 						ymin-10*MarginFactor,ymax+10*MarginFactor)
 			# SetExtent(df,xmin,xmax,ymin,ymax)
@@ -42,8 +42,8 @@ def ExportPNG(FloorList,MallName,RootDir):
 								df_export_height=imgh)
 
 def main():
-	MallName = 'MTC'
-	FloorList = ['M']
+	MallName = 'ChaoYangDaYueCheng'
+	FloorList = ['AEON']
 	RootDir = 'E:\MDBGenerate\= MDB_Modify_BJ\= ModifiedOK'
 	ExportPNG(FloorList,MallName,RootDir)
 
