@@ -82,6 +82,10 @@ class Controler(DisplayFrame):
 		self.cb_Interpolate = Checkbutton(self.f_CanOpt,text='Interpolate',
 										variable=self.var_Interpolate)
 		self.cb_Interpolate.pack(side=RIGHT)
+		self.var_FromAPP = IntVar()
+		self.cb_FromAPP = Checkbutton(self.f_CanOpt,text='FromAPP',
+										variable=self.var_FromAPP)
+		self.cb_FromAPP.pack(side=RIGHT)
 
 	def initTraceOpt(self,Caller):
 		self.lb_tracepath = Label(self.f_TrcOpt,text='TracePath',font = 'Helvetica -12 bold')
@@ -130,9 +134,12 @@ class Controler(DisplayFrame):
 		self.btn_showall = Button(self.f_bar,text='ShowAll',command = Caller.OnShowAll)
 		self.btn_showall.pack(side=RIGHT)
 
+
 	def initStatus(self,Caller):
-		self.CoordLbl = Label(self.f_bottom,text='xl=0, yl=0; xr=0, yr=0',font = 'Helvetica -12 bold')
+		self.CoordLbl = Label(self.f_bottom,text='xl=0, yl=0; xr=0, yr=0;',font = 'Helvetica -12 bold')
 		self.CoordLbl.pack(side=LEFT)
+		self.TimeLbl = Label(self.f_bottom,text='Start= ; End= ',font = 'Helvetica -12 bold')
+		self.TimeLbl.pack(side=LEFT)
 
 	def initButtons(self,Caller):
 		self.btn_quit = Button(self.f_bottom,text='QUIT',command=self.top.quit,activeforeground='white',
@@ -143,8 +150,9 @@ class Controler(DisplayFrame):
 	def AddTrace(self,trace):
 		if not trace==None:
 			super(Controler,self).AddTrace(trace)
-			TraceLen = self.TraceList[0].endtime - self.TraceList[0].starttime
-			self.ProgBar.config(to=TraceLen)
+			# TraceLen = self.TraceList[0].endtime - self.TraceList[0].starttime
+			TraceLen = len(self.TraceList[0].trace.keys())
+			self.ProgBar.config(to=TraceLen-1)
 		pass
 		
 
@@ -217,8 +225,8 @@ class GUITop(object):
 		self.recW = 15
 		self.MapParamPath = MapParamPath
 		self.MapParam = self.ParseMapParam(self.MapParamPath)
-		if not (LTrace == None or RTrace == None): 
-			self.FitTwoTraces(self.LTrace,self.RTrace)
+		# if not (LTrace == None or RTrace == None): 
+		# 	self.FitTwoTraces(self.LTrace,self.RTrace)
 		self.MapPath = ''
 		self.CurrFlr = ''
 		# self.MapPath = 'TongFangD19_Floor_F19.png'
@@ -285,21 +293,23 @@ class GUITop(object):
 			return -1
 
 	def FitTwoTraces(self,TA,TB):
-		starttime = max([TA.starttime,TB.starttime])
-		endtime = min([TA.endtime,TB.endtime])
-		# TODO: clip the trace
-		SecListA = TA.trace.keys()
-		SecListA.sort()
-		SecListB = TB.trace.keys()
-		SecListB.sort()
-		for i_time in SecListA:
-			if not i_time in xrange(starttime,endtime+1):
-				TA.trace.pop(i_time)
-		TA.RefreshTrace()
-		for i_time in SecListB:
-			if not i_time in xrange(starttime,endtime+1):
-				TB.trace.pop(i_time)
-		TB.RefreshTrace()
+		print 'FitTwoTraces'
+		if not (TA == None or TA == None):
+			starttime = max([TA.starttime,TB.starttime])
+			endtime = min([TA.endtime,TB.endtime])
+			# TODO: clip the trace
+			SecListA = TA.trace.keys()
+			SecListA.sort()
+			SecListB = TB.trace.keys()
+			SecListB.sort()
+			for i_time in SecListA:
+				if not i_time in xrange(starttime,endtime+1):
+					TA.trace.pop(i_time)
+			TA.RefreshTrace()
+			for i_time in SecListB:
+				if not i_time in xrange(starttime,endtime+1):
+					TB.trace.pop(i_time)
+			TB.RefreshTrace()
 
 		pass
 
@@ -311,8 +321,8 @@ class GUITop(object):
 		if self.Con.var_Interpolate.get() == 1 :
 			self.LTrace.LinearInterpolation()
 			self.RTrace.LinearInterpolation()
-
-		self.FitTwoTraces(self.LTrace,self.RTrace)
+			self.FitTwoTraces(self.LTrace,self.RTrace)
+		
 		self.Con.ClearAllTrace()
 		self.Show.ClearAllTrace()
 		self.Show.C.delete('rec')
@@ -410,8 +420,18 @@ class GUITop(object):
 	def DrawTrace(self,trace,time):
 		W = self.recW
 		H = self.recH
-		PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
-		PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
+		
+
+		print trace.trace.keys() 
+		print time,len(trace.trace.keys())
+		# The Result From Trace Record APP  FromAPP
+		if self.Con.var_FromAPP.get() == 1:
+			PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
+			PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY) 
+		# The result from location server
+		else:
+			PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale)  
+			PosY = lambda t:(trace.trace[t].getY()* self.Show.Scale)
 		rec = self.Show.recDict[trace]
 		self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
@@ -444,7 +464,7 @@ class GUITop(object):
 		# H = self.recH
 
 		for trace in self.Show.TraceList:
-			time = trace.starttime + self.Con.ProgBar.get()
+			time = trace.starttime + self.Con.ProgBar.get()    # Need fit the real time list~
 			self.DrawTrace(trace,time)
 			# PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
 			# PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
@@ -491,8 +511,8 @@ class GUITop(object):
 	def OnShowAll(self,ev=None):
 		for trace in self.Show.TraceList:
 			print trace.starttime,trace.endtime,len(trace.trace)
-			for time in xrange(trace.starttime,trace.endtime):
-				# self.DrawTrace(trace,time)
+			for time in trace.trace.keys():
+				self.DrawTrace(trace,time)
 				pass
 		pass
 
