@@ -131,6 +131,7 @@ class Controler(DisplayFrame):
 	def initPrograssBar(self,Caller):
 		self.ProgBar = Scale(self.f_bar,from_=0,to=100,orient=HORIZONTAL,command=Caller.OnProgBarMove)
 		self.ProgBar.pack(fill=X,side=TOP)
+		self.ProgBarScale = []    # Scale to real time point
 		self.btn_showall = Button(self.f_bar,text='ShowAll',command = Caller.OnShowAll)
 		self.btn_showall.pack(side=RIGHT)
 
@@ -153,6 +154,9 @@ class Controler(DisplayFrame):
 			# TraceLen = self.TraceList[0].endtime - self.TraceList[0].starttime
 			TraceLen = len(self.TraceList[0].trace.keys())
 			self.ProgBar.config(to=TraceLen-1)
+			self.ProgBarScale = self.TraceList[0].trace.keys()
+			self.ProgBarScale.sort()
+			# print self.ProgBarScale
 		pass
 		
 
@@ -421,17 +425,22 @@ class GUITop(object):
 		W = self.recW
 		H = self.recH
 		
-
-		print trace.trace.keys() 
+		# print trace.trace.keys() 
 		print time,len(trace.trace.keys())
 		# The Result From Trace Record APP  FromAPP
 		if self.Con.var_FromAPP.get() == 1:
 			PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
 			PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY) 
+		
 		# The result from location server
 		else:
-			PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale)  
-			PosY = lambda t:(trace.trace[t].getY()* self.Show.Scale)
+			if trace.tag == 'L':
+				PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale)  
+				PosY = lambda t:(trace.trace[t].getY()* self.Show.Scale)
+			else:
+				PosX = lambda t:0
+				PosY = lambda t:0
+		
 		rec = self.Show.recDict[trace]
 		self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
@@ -464,7 +473,10 @@ class GUITop(object):
 		# H = self.recH
 
 		for trace in self.Show.TraceList:
-			time = trace.starttime + self.Con.ProgBar.get()    # Need fit the real time list~
+			# time = trace.starttime + self.Con.ProgBar.get()    # Fit the real time list
+
+			time = self.Con.ProgBarScale[self.Con.ProgBar.get()]
+			print 'Find the Scale:',self.Con.ProgBar.get(),time
 			self.DrawTrace(trace,time)
 			# PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
 			# PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
@@ -494,11 +506,15 @@ class GUITop(object):
 			# 	#TODO: add a tag on the current point
 			# 	pass
 
-		# Error Calculation
-		ErrorDist = self.CalcDist(float(self.Show.TraceList[0].trace[time].x),
-								float(self.Show.TraceList[0].trace[time].y),
-								float(self.Show.TraceList[1].trace[time].x),
-								float(self.Show.TraceList[1].trace[time].y))
+		# Error Calculation in APP record
+		if self.Con.var_FromAPP.get() == 1:
+			ErrorDist = self.CalcDist(float(self.Show.TraceList[0].trace[time].x),
+									float(self.Show.TraceList[0].trace[time].y),
+									float(self.Show.TraceList[1].trace[time].x),
+									float(self.Show.TraceList[1].trace[time].y))
+		else:
+			ErrorDist = 0.0
+
 		self.TotalErr += ErrorDist
 		self.TotalPts += 1
 		self.AvgErr = float(self.TotalErr/self.TotalPts)
