@@ -191,8 +191,8 @@ class ShowPath(DisplayFrame):
 		
 		self.C.pack(expand=1)
 		
-		self.recW = 15
-		self.recH = 15
+		self.recW = 7
+		self.recH = 7
 		self.recDict = {}
 		self.recStyle = {'L':['red','green'],'R':['blue','white']}
 
@@ -225,8 +225,8 @@ class GUITop(object):
 		self.RTrace = RTrace
 		self.TracePath = TracePath
 		self.TraceMode = '0'  # 0=Default, 1=PointTrace, 2=Line, 3=TagOn
-		self.recH = 15
-		self.recW = 15
+		self.recH = 10
+		self.recW = 10
 		self.MapParamPath = MapParamPath
 		self.MapParam = self.ParseMapParam(self.MapParamPath)
 		# if not (LTrace == None or RTrace == None): 
@@ -425,8 +425,10 @@ class GUITop(object):
 		W = self.recW
 		H = self.recH
 		
+		#for debug
 		# print trace.trace.keys() 
-		print time,len(trace.trace.keys())
+		# print time,len(trace.trace.keys())
+
 		# The Result From Trace Record APP  FromAPP
 		if self.Con.var_FromAPP.get() == 1:
 			PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
@@ -445,7 +447,7 @@ class GUITop(object):
 		self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
 		# for debug
-		print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
+		# print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
 		
 
 		# Keep a trace on map 
@@ -476,7 +478,7 @@ class GUITop(object):
 			# time = trace.starttime + self.Con.ProgBar.get()    # Fit the real time list
 
 			time = self.Con.ProgBarScale[self.Con.ProgBar.get()]
-			print 'Find the Scale:',self.Con.ProgBar.get(),time
+			# print 'Find the Scale:',self.Con.ProgBar.get(),time
 			self.DrawTrace(trace,time)
 			# PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
 			# PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
@@ -527,10 +529,48 @@ class GUITop(object):
 	def OnShowAll(self,ev=None):
 		for trace in self.Show.TraceList:
 			print trace.starttime,trace.endtime,len(trace.trace)
+			if trace.tag == 'L':     # For the locating trace
+				self.CalcRegion(trace)
+
 			for time in trace.trace.keys():
 				self.DrawTrace(trace,time)
 				pass
 		pass
+
+	def RegionCount(self,alist,rules):
+		# rules: {keyA:ruleA,keyB:ruleB,...}
+		count = dict(zip(rules.keys(),[0 for i in xrange(0,len(rules))]))
+		for e in alist:
+			for key in rules.keys():
+				if rules[key](e) == True:
+					count[key] += 1
+					#debug
+					if e >158:
+						print e 
+
+					pass
+			pass
+		return count
+		pass
+
+	# For AEON case, analyse the region distribution
+	def CalcRegion(self,trace):
+		if self.Con.var_FromAPP.get() == 1:
+			bottom = lambda t: t<90
+			lower = lambda t: t>=90 and t<130
+			upper = lambda t: t>=130 and t<158
+			top = lambda t: t>=158
+		else:
+			bottom = lambda t: t>135
+			lower = lambda t: t>=95 and t<135
+			upper = lambda t: t>=66 and t<95
+			top = lambda t: t<66
+
+		# rules = {'Top':top,'Upper':upper,'Lower':lower, 'Bottom':bottom}	
+		rules = {'I':top,'II':upper,'III':lower, 'IV':bottom}		
+		TraceY = [trace.trace[t].getY() for t in trace.trace.keys()]
+		count = self.RegionCount(TraceY,rules)
+		print count
 
 	def CalcDist(self,x1,y1,x2,y2):
 		 return ((x1-x2) **2 +(y1-y2)**2) **0.5

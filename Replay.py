@@ -264,6 +264,9 @@ class XMLFile(object):
 		# if self.soup.recode['starttime'] != self.soup.recode.loacationpoints
 		pass
 
+	def ReassignTimestamp(self,starttime,endtime,step=1):
+		pass
+
 def main():
 	rootpath = './TFRecord\Test2'
 	filename = '\\10100120_101001200004_20141017132945_1.xml'
