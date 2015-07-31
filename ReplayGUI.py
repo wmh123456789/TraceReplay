@@ -461,9 +461,10 @@ class GUITop(object):
 		if self.Con.var_modeLine.get() == 1:
 			if time > trace.starttime:
 				#ToDo: Draw a line 
-				self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time),
+				time0 = self.Con.ProgBarScale[self.Con.ProgBar.get()-1]
+				self.Show.C.create_line(PosX(time0),PosY(time0),PosX(time),PosY(time),
 						fill=self.Show.recStyle[trace.tag][0],
-						width = 2.5,tags='trace')
+						width = 1.5,tags='trace')
 				pass
 		if '3' in  self.TraceMode:    # Tag on trace
 			#TODO: add a tag on the current point
@@ -480,33 +481,7 @@ class GUITop(object):
 			time = self.Con.ProgBarScale[self.Con.ProgBar.get()]
 			# print 'Find the Scale:',self.Con.ProgBar.get(),time
 			self.DrawTrace(trace,time)
-			# PosX = lambda t:(trace.trace[t].getX()* self.Show.Scale + self.Show.SftX)  
-			# PosY = lambda t:(-1*trace.trace[t].getY()* self.Show.Scale + self.Show.SftY)  
-			# rec = self.Show.recDict[trace]
-			# self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
-
-			# # for debug
-			# print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
 			
-
-			# # Keep a trace on map 
-			# # if '1' in self.TraceMode:     # Points-Trace mode
-			# if self.Con.var_modePtTrace.get() == 1:
-			# 	self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
-			# 				fill=self.Show.recStyle[trace.tag][0], 
-			# 				outline=self.Show.recStyle[trace.tag][1],
-			# 				tags='trace')
-			# # if '2' in self.TraceMode:    # Lines mode
-			# if self.Con.var_modeLine.get() == 1:
-			# 	if time > trace.starttime:
-			# 		#ToDo: Draw a line 
-			# 		self.Show.C.create_line(PosX(time-1),PosY(time-1),PosX(time),PosY(time),
-			# 				fill=self.Show.recStyle[trace.tag][0],
-			# 				width = 2.5,tags='trace')
-			# 		pass
-			# if '3' in  self.TraceMode:    # Tag on trace
-			# 	#TODO: add a tag on the current point
-			# 	pass
 
 		# Error Calculation in APP record
 		if self.Con.var_FromAPP.get() == 1:
@@ -528,7 +503,8 @@ class GUITop(object):
 
 	def OnShowAll(self,ev=None):
 		for trace in self.Show.TraceList:
-			print trace.starttime,trace.endtime,len(trace.trace)
+			print 'From:',self.Sec2Time(trace.starttime),' To:',self.Sec2Time(trace.endtime)
+			print 'Total Points:',len(trace.trace)
 			if trace.tag == 'L':     # For the locating trace
 				self.CalcRegion(trace)
 
@@ -571,6 +547,18 @@ class GUITop(object):
 		TraceY = [trace.trace[t].getY() for t in trace.trace.keys()]
 		count = self.RegionCount(TraceY,rules)
 		print count
+
+	# Retrun DDHHMMSS
+	def Sec2Time(self,sec):
+		day = int(sec)/86400
+		sec -= day*86400
+		hour = int(sec)/3600
+		sec -= hour*3600
+		minute = int(sec)/60
+		sec -= minute*60
+		# print day,hour,minute,sec
+		# return str(day)+str(hour)+str(minute)+str(sec)
+		return "%2s%2s%2s%2s"%(day,hour,minute,sec)
 
 	def CalcDist(self,x1,y1,x2,y2):
 		 return ((x1-x2) **2 +(y1-y2)**2) **0.5
