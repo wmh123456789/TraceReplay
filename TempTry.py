@@ -16,13 +16,22 @@ def RegionCount(alist,rules):
 
 def main():
 
-	A = lambda t: t<10
-	B = lambda t: t>=10 and t<20
-	C = lambda t: t>=20
-	rules = {'I':A,'II':B,'III':C}
-	alist = [1,2,12,23,33,44]
-	count = RegionCount(alist,rules)
-	print count
+	# A = lambda t: t<10
+	# B = lambda t: t>=10 and t<20
+	# C = lambda t: t>=20
+	# rules = {'I':A,'II':B,'III':C}
+	# alist = [1,2,12,23,33,44]
+	# count = RegionCount(alist,rules)
+	# print count
+
+	X = dict(zip(xrange(0,10),'ABCDEFGHIJ'))
+	del X[1]
+	X.pop(2)
+	print X
+
+	a = [1,2,3,4,5,X]
+	print a.index(X)
+
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 from Tkinter import *
-import os
+import os,copy
 from bs4 import BeautifulSoup 
 
 def TestData():
@@ -142,6 +142,7 @@ class LocTrace(object):
 		self.starttime = SecList[0]
 		self.endtime = SecList[-1]
 
+
 	def RefreshTrace(self):
 		SecList = self.trace.keys()
 		SecList.sort()
@@ -160,7 +161,31 @@ class LocTrace(object):
 		self.xmin = min(self.xlist)
 		self.ymax = max(self.ylist)
 		self.ymin = min(self.ylist)
+
 		
+	def CutTrace(self,NewStart,NewEnd):
+		SecList = self.trace.keys()
+		SecList.sort()
+		if NewStart < self.endtime and NewEnd > self.starttime :
+			# Find the real edges for the cut
+			NewStart = max(NewStart,self.starttime)
+			NewEnd = min(NewEnd,self.endtime)
+			i_sec = 0
+			while NewStart > SecList[i_sec]:
+				i_sec += 1
+			NewStart = SecList[i_sec]
+			while NewEnd > SecList[i_sec]:
+				i_sec += 1
+			NewEnd = SecList[i_sec-1]
+			
+			# Cut the trace
+			for key in self.trace.keys():
+				if key < NewStart or key > NewEnd:
+					self.trace.pop(key)
+			self.RefreshTrace()
+
+		else:
+			print "The input start or end is not in the original trace period."
 
 
 	def __str__(self):
@@ -184,6 +209,7 @@ class LocTrace(object):
 
 		return string
 		pass
+
 
 	def LinearInterpolation(self):
 		timelist = self.trace.keys()

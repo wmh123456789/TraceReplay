@@ -11,6 +11,7 @@ class DisplayFrame(object):
 		self.top.geometry(size)
 		self.top.title(title)
 		self.TraceList = []
+
 		print 'DisplayFrame is loaded'
 
 	def AddTrace(self,trace):
@@ -135,6 +136,17 @@ class Controler(DisplayFrame):
 		self.btn_showall = Button(self.f_bar,text='ShowAll',command = Caller.OnShowAll)
 		self.btn_showall.pack(side=RIGHT)
 
+		self.lb_start = Label(self.f_bar,text='Start',font = 'Helvetica -12 bold')
+		self.lb_start.pack(side=LEFT)
+		self.tx_start = Text(self.f_bar,height=1,width=10)
+		self.tx_start.pack(side=LEFT)
+		self.lb_end = Label(self.f_bar,text='End',font = 'Helvetica -12 bold')
+		self.lb_end.pack(side=LEFT)
+		self.tx_end = Text(self.f_bar,height=1,width=10)
+		self.tx_end.pack(side=LEFT)
+		self.btn_cut = Button(self.f_bar,text='CutTrace',command = Caller.OnCutTrace)
+		self.btn_cut.pack(side=LEFT)
+
 
 	def initStatus(self,Caller):
 		self.CoordLbl = Label(self.f_bottom,text='xl=0, yl=0; xr=0, yr=0;',font = 'Helvetica -12 bold')
@@ -152,12 +164,24 @@ class Controler(DisplayFrame):
 		if not trace==None:
 			super(Controler,self).AddTrace(trace)
 			# TraceLen = self.TraceList[0].endtime - self.TraceList[0].starttime
-			TraceLen = len(self.TraceList[0].trace.keys())
-			self.ProgBar.config(to=TraceLen-1)
-			self.ProgBarScale = self.TraceList[0].trace.keys()
-			self.ProgBarScale.sort()
-			# print self.ProgBarScale
+			for t in self.TraceList:
+				if t.tag == 'L':
+					TraceLen = len(t.trace.keys())
+					self.ProgBar.config(to=TraceLen-1)
+					self.ProgBarScale = t.trace.keys()
+					self.ProgBarScale.sort()
+		
 		pass
+
+
+	def RefreshProBar(self):
+		for t in self.TraceList:
+				if t.tag == 'L':
+					TraceLen = len(t.trace.keys())
+					self.ProgBar.config(to=TraceLen-1)
+					self.ProgBarScale = t.trace.keys()
+					self.ProgBarScale.sort()
+
 		
 
 class ShowPath(DisplayFrame):
@@ -203,6 +227,10 @@ class ShowPath(DisplayFrame):
 	def AddTrace(self,trace):
 		# self.TraceList.append(trace)
 		super(ShowPath,self).AddTrace(trace)
+		BackupTrace = copy.deepcopy(trace)
+		BackupTrace.tag += 'B'
+		self.TraceList.append(BackupTrace)
+
 		rec = self.C.create_rectangle(0, 0, self.recW, self.recH, 
 						fill=self.recStyle[trace.tag][0], 
 						outline=self.recStyle[trace.tag][1],
@@ -443,43 +471,45 @@ class GUITop(object):
 				PosX = lambda t:0
 				PosY = lambda t:0
 		
-		rec = self.Show.recDict[trace]
-		self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
+		print "Trace Tag:",trace.tag
+		if not 'B' in trace.tag:
+			rec = self.Show.recDict[trace]
+			self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
 
-		# for debug
-		# print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
-		
+			# for debug
+			# print "X:"+str(PosX(time))+"; Y:"+str(PosY(time))
+			
 
-		# Keep a trace on map 
-		# if '1' in self.TraceMode:     # Points-Trace mode
-		if self.Con.var_modePtTrace.get() == 1:
-			self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
-						fill=self.Show.recStyle[trace.tag][0], 
-						outline=self.Show.recStyle[trace.tag][1],
-						tags='trace')
-		# if '2' in self.TraceMode:    # Lines mode
-		if self.Con.var_modeLine.get() == 1:
-			if time > trace.starttime:
-				#ToDo: Draw a line 
-				time0 = self.Con.ProgBarScale[self.Con.ProgBar.get()-1]
-				self.Show.C.create_line(PosX(time0),PosY(time0),PosX(time),PosY(time),
-						fill=self.Show.recStyle[trace.tag][0],
-						width = 1.5,tags='trace')
-				pass
-		if '3' in  self.TraceMode:    # Tag on trace
-			#TODO: add a tag on the current point
-			pass
+			# Keep a trace on map 
+			# if '1' in self.TraceMode:     # Points-Trace mode
+			if self.Con.var_modePtTrace.get() == 1:
+				self.Show.C.create_rectangle(PosX(time), PosY(time), W+PosX(time), H+PosY(time), 
+							fill=self.Show.recStyle[trace.tag][0], 
+							outline=self.Show.recStyle[trace.tag][1],
+							tags='trace')
+			# if '2' in self.TraceMode:    # Lines mode
+			if self.Con.var_modeLine.get() == 1:
+				if time > trace.starttime:
+					#ToDo: Draw a line 
+					time0 = self.Con.ProgBarScale[self.Con.ProgBar.get()-1]
+					self.Show.C.create_line(PosX(time0),PosY(time0),PosX(time),PosY(time),
+							fill=self.Show.recStyle[trace.tag][0],
+							width = 1.5,tags='trace')
+					pass
+			if '3' in  self.TraceMode:    # Tag on trace
+				#TODO: add a tag on the current point
+				Prograss
 
 	def OnProgBarMove(self,ev=None):
 		# print self.Con.ProgBar.get()
 		# W = self.recW
 		# H = self.recH
 
+		time = self.Con.ProgBarScale[self.Con.ProgBar.get()]
+		start = self.Con.ProgBarScale[0] 
+		end = self.Con.ProgBarScale[-1] 
 		for trace in self.Show.TraceList:
 			# time = trace.starttime + self.Con.ProgBar.get()    # Fit the real time list
-
-			time = self.Con.ProgBarScale[self.Con.ProgBar.get()]
-			# print 'Find the Scale:',self.Con.ProgBar.get(),time
 			self.DrawTrace(trace,time)
 			
 
@@ -496,6 +526,9 @@ class GUITop(object):
 		self.TotalPts += 1
 		self.AvgErr = float(self.TotalErr/self.TotalPts)
 		self.Con.CoordLbl.config(text = 'ErrorDst=%.2f; AvgErr=%.3f'%(ErrorDist,self.AvgErr))
+		self.Con.TimeLbl.config(text='Start='+self.Sec2Time(start)
+									+';End=' +self.Sec2Time(end)
+									+';Time='+self.Sec2Time(time))
 
 		return self.Con.ProgBar.get()
 		pass
@@ -511,6 +544,45 @@ class GUITop(object):
 			for time in trace.trace.keys():
 				self.DrawTrace(trace,time)
 				pass
+		pass
+
+	def Time2Sec(self,timestamp):
+		if len(timestamp) != 8:
+			print 'ERROR: The format of the timestamp is not "DDHHMMSS"'
+			print len(timestamp),timestamp
+			return -1
+		else:
+			day = int(timestamp[0:2])
+			hour = int(timestamp[2:4])
+			minute = int(timestamp[4:6])
+			second = int(timestamp[6:8])
+			# print day,hour,minute,second
+			return second+minute*60+hour*3600+day*86400
+
+	def OnCutTrace(self):
+		StartTx= self.Con.tx_start.get(1.0,END).strip()
+		EndTx  = self.Con.tx_end.get(1.0,END).strip()
+		Start = self.Time2Sec(StartTx)
+		End = self.Time2Sec(EndTx)
+		BackupTrace = None
+
+		for trace in self.Show.TraceList:
+			if trace.tag == 'LB':
+				BackupTrace = copy.deepcopy(trace)
+				print "Got backup"
+
+		for trace in self.Show.TraceList:
+			if trace.tag == 'L'and BackupTrace != None and Start>0 and End>0: # Only for the locating trace
+				BackupTrace.CutTrace(Start,End)
+				print "Cut the backup:",BackupTrace.starttime,BackupTrace.endtime
+				BackupTrace.tag = 'L'
+				self.Show.TraceList.remove(trace)
+				self.Show.AddTrace(BackupTrace)	
+				# trace.CutTrace(Start,End)
+			else:
+				pass
+
+		self.Con.RefreshProBar()
 		pass
 
 	def RegionCount(self,alist,rules):
@@ -558,7 +630,7 @@ class GUITop(object):
 		sec -= minute*60
 		# print day,hour,minute,sec
 		# return str(day)+str(hour)+str(minute)+str(sec)
-		return "%2s%2s%2s%2s"%(day,hour,minute,sec)
+		return "%02sth%02s:%02s:%02s"%(day,hour,minute,sec)
 
 	def CalcDist(self,x1,y1,x2,y2):
 		 return ((x1-x2) **2 +(y1-y2)**2) **0.5
@@ -595,10 +667,6 @@ if __name__ == "__main__":
 	
 	main()
 	# temptest()
-	
-
-
-
 	
 
 
