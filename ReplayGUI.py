@@ -16,7 +16,7 @@ class DisplayFrame(object):
 
 	def AddTrace(self,trace):
 		self.TraceList.append(trace)
-		print 'Trace',trace.tag,'is added'
+		# print 'Trace',trace.tag,'is added'
 
 
 	def ClearAllTrace(self):
@@ -167,6 +167,7 @@ class Controler(DisplayFrame):
 			for t in self.TraceList:
 				if t.tag == 'L':
 					TraceLen = len(t.trace.keys())
+					print "TraceLen:",TraceLen
 					self.ProgBar.config(to=TraceLen-1)
 					self.ProgBarScale = t.trace.keys()
 					self.ProgBarScale.sort()
@@ -174,10 +175,12 @@ class Controler(DisplayFrame):
 		pass
 
 
-	def RefreshProBar(self):
-		for t in self.TraceList:
+	def RefreshProBar(self,TraceList):
+		for t in TraceList:
 				if t.tag == 'L':
+					print "RefreshProBar..."
 					TraceLen = len(t.trace.keys())
+					print "TraceLen:",TraceLen
 					self.ProgBar.config(to=TraceLen-1)
 					self.ProgBarScale = t.trace.keys()
 					self.ProgBarScale.sort()
@@ -236,6 +239,18 @@ class ShowPath(DisplayFrame):
 						outline=self.recStyle[trace.tag][1],
 						tags=(trace.tag,'rec'))
 		self.recDict.update({trace:rec})
+
+
+	def ReplaceTrace(self,NewTrace,OldTrace):
+		rec = self.C.create_rectangle(0, 0, self.recW, self.recH, 
+						fill=self.recStyle[NewTrace.tag][0], 
+						outline=self.recStyle[NewTrace.tag][1],
+						tags=(NewTrace.tag,'rec'))
+		self.recDict.pop(OldTrace)
+		self.recDict.update({NewTrace:rec})
+		self.TraceList.append(NewTrace)
+		self.TraceList.remove(OldTrace)
+
 
 
 	def Loadmap(self,mappath):
@@ -471,7 +486,7 @@ class GUITop(object):
 				PosX = lambda t:0
 				PosY = lambda t:0
 		
-		print "Trace Tag:",trace.tag
+		# print "Trace Tag:",trace.tag
 		if not 'B' in trace.tag:
 			rec = self.Show.recDict[trace]
 			self.Show.C.coords(rec,(PosX(time), PosY(time), W+PosX(time), H+PosY(time)))
@@ -527,8 +542,8 @@ class GUITop(object):
 		self.AvgErr = float(self.TotalErr/self.TotalPts)
 		self.Con.CoordLbl.config(text = 'ErrorDst=%.2f; AvgErr=%.3f'%(ErrorDist,self.AvgErr))
 		self.Con.TimeLbl.config(text='Start='+self.Sec2Time(start)
-									+';End=' +self.Sec2Time(end)
-									+';Time='+self.Sec2Time(time))
+									+'; End=' +self.Sec2Time(end)
+									+'; Time='+self.Sec2Time(time))
 
 		return self.Con.ProgBar.get()
 		pass
@@ -566,23 +581,31 @@ class GUITop(object):
 		End = self.Time2Sec(EndTx)
 		BackupTrace = None
 
+		print 'Now we have',len(self.Show.TraceList),"traces."
 		for trace in self.Show.TraceList:
+			print trace.tag, len(trace.trace.keys())
 			if trace.tag == 'LB':
 				BackupTrace = copy.deepcopy(trace)
 				print "Got backup"
 
 		for trace in self.Show.TraceList:
-			if trace.tag == 'L'and BackupTrace != None and Start>0 and End>0: # Only for the locating trace
+			print trace.tag
+			if trace.tag == 'L' and trace != BackupTrace and BackupTrace != None and Start>0 and End>0: # Only for the locating trace
 				BackupTrace.CutTrace(Start,End)
-				print "Cut the backup:",BackupTrace.starttime,BackupTrace.endtime
+				print "Cut the backup:",BackupTrace.starttime,BackupTrace.endtime			
 				BackupTrace.tag = 'L'
-				self.Show.TraceList.remove(trace)
-				self.Show.AddTrace(BackupTrace)	
+
+				# self.Show.TraceList.remove(trace)
+				# print "After remove:",len(self.Show.TraceList)
+				# self.Show.AddTrace(BackupTrace)	
+
+				self.Show.ReplaceTrace(NewTrace=BackupTrace,OldTrace=trace)
+				print "After replace:",len(self.Show.TraceList)
 				# trace.CutTrace(Start,End)
 			else:
 				pass
 
-		self.Con.RefreshProBar()
+		self.Con.RefreshProBar(self.Show.TraceList)
 		pass
 
 	def RegionCount(self,alist,rules):
@@ -630,7 +653,7 @@ class GUITop(object):
 		sec -= minute*60
 		# print day,hour,minute,sec
 		# return str(day)+str(hour)+str(minute)+str(sec)
-		return "%02sth%02s:%02s:%02s"%(day,hour,minute,sec)
+		return "%02dth%02d:%02d:%02d"%(day,hour,minute,sec)
 
 	def CalcDist(self,x1,y1,x2,y2):
 		 return ((x1-x2) **2 +(y1-y2)**2) **0.5

@@ -29,8 +29,11 @@ def main():
 	X.pop(2)
 	print X
 
-	a = [1,2,3,4,5,X]
-	print a.index(X)
+	a = 1
+	b = 22
+	print '=%02d,%2d'%(a,b)
+
+
 
 
 

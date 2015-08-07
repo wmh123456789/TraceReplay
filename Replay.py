@@ -116,7 +116,8 @@ class LocPoint(object):
 			minute = int(sec)/60
 			sec -= minute*60
 			# print day,hour,minute,sec
-			return yyyymm+str(day)+str(hour)+str(minute)+str(sec)
+			# return yyyymm+str(day)+str(hour)+str(minute)+str(sec)
+			return yyyymm+"%02d%02d%02d%02d"%(day,hour,minute,sec)
 		pass
 
 
